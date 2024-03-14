@@ -2,12 +2,12 @@ import { useCallback } from "react";
 import { FaFeather, FaFeatherAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
-// import useLoginModal from "@/hooks/useLoginModal";
+import useLoginModal from "@/hooks/useLoginModal";
 // import useCurrentUser from "@/hooks/useCurrentUser";
 
 const SidebarInteractButton = () => {
   const router = useRouter();
-  // const loginModal = useLoginModal();
+  const loginModal = useLoginModal();
   // const { data: currentUser } = useCurrentUser();
 
   // const onClick = useCallback(() => {
@@ -18,12 +18,12 @@ const SidebarInteractButton = () => {
   //   router.push('/');
   // }, [loginModal, router, currentUser]);
 
+  const onClick = useCallback(() => {
+    loginModal.onOpen();
+  }, [loginModal]);
+
   return (
-    <div
-      onClick={() => router.push("/")}
-      // onClick={onClick}
-      className="    pl-2 lg:pl-0"
-    >
+    <div onClick={onClick} className="    pl-2 lg:pl-0">
       <div
         className="
         mt-6

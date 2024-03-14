@@ -4,6 +4,9 @@ import "./globals.css";
 //
 import Sidebar from "@/components/layout/Sidebar";
 import FollowBar from "@/components/layout/FollowBar";
+import Modal from "@/components/Modal";
+import LoginModal from "@/components/modals/LoginModal";
+import RegisterModal from "@/components/modals/RegisterModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +23,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <main className="flex min-h-screen flex-col items-center justify-between px-24"> */}
+        <RegisterModal />
+        <LoginModal />
         <div className="container h-full mx-auto xl:px-30 max-w-6xl">
           <div className="grid  grid-cols-4 h-full">
             <Sidebar />
@@ -37,7 +41,6 @@ export default function RootLayout({
             <FollowBar />
           </div>
         </div>
-        {/* </main> */}
       </body>
     </html>
   );
