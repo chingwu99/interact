@@ -1,6 +1,6 @@
 "use client";
 
-// import { signOut } from 'next-auth/react';
+import { signOut } from "next-auth/react";
 import { BiLogOut } from "react-icons/bi";
 import { BsHouseFill, BsBellFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
@@ -10,8 +10,13 @@ import { FaUser } from "react-icons/fa";
 import SidebarItem from "./SidebarItem";
 import SidebarLogo from "./SidebarLogo";
 import SidebarInteractButton from "./SidebarInteractButton";
+import { SafeUser } from "@/types";
 
-const Sidebar = () => {
+interface SidebarProps {
+  currentUser?: SafeUser | null;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
   // const { data: currentUser } = useCurrentUser();
 
   const items = [
@@ -45,14 +50,22 @@ const Sidebar = () => {
             <SidebarItem
               key={item.href}
               // alert={item.alert}
-              // auth={item.auth}
+              auth={item.auth}
               href={item.href}
               icon={item.icon}
               label={item.label}
+              currentUser={currentUser}
             />
           ))}
-          <SidebarItem icon={BiLogOut} label="Logout" />
-          {/* {currentUser && <SidebarItem onClick={() => signOut()} icon={BiLogOut} label="Logout" />} */}
+
+          {currentUser && (
+            <SidebarItem
+              onClick={() => signOut()}
+              icon={BiLogOut}
+              label="Logout"
+              currentUser={currentUser}
+            />
+          )}
           <SidebarInteractButton />
         </div>
       </div>
