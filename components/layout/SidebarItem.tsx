@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation";
 import useLoginModal from "@/hooks/useLoginModal";
 // import useCurrentUser from '@/hooks/useCurrentUser';
 import { BsDot } from "react-icons/bs";
-import { SafeUser } from "@/types";
+// import { SafeUser } from "@/types";
+import { User } from "@prisma/client";
 
 interface SidebarItemProps {
   label: string;
@@ -16,7 +17,7 @@ interface SidebarItemProps {
   onClick?: () => void;
   auth?: boolean;
   // alert?: boolean;
-  currentUser?: SafeUser | null;
+  currentUser?: User | null;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({

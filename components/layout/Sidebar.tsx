@@ -10,10 +10,11 @@ import { FaUser } from "react-icons/fa";
 import SidebarItem from "./SidebarItem";
 import SidebarLogo from "./SidebarLogo";
 import SidebarInteractButton from "./SidebarInteractButton";
-import { SafeUser } from "@/types";
+
+import { User } from "@prisma/client";
 
 interface SidebarProps {
-  currentUser?: SafeUser | null;
+  currentUser?: User | null;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
