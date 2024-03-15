@@ -8,3 +8,7 @@ export type SafeUser = Omit<
   updatedAt: string;
   emailVerified: string | null;
 };
+
+export type UserWithFollowersCount = User & {
+  followersCount: number;
+};

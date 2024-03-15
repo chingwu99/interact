@@ -1,14 +1,14 @@
 "use client";
 
-// import { SafeUser } from "@/types";
-import { User } from "@prisma/client";
+import { UserWithFollowersCount } from "@/types";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 
 interface AvatarImageProps {
   userId: string;
-  fetchedUser: User | null;
+  fetchedUser: UserWithFollowersCount | null;
 }
 
 const AvatarImage: React.FC<AvatarImageProps> = ({ userId, fetchedUser }) => {
