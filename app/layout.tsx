@@ -9,6 +9,8 @@ import LoginModal from "@/components/modals/LoginModal";
 import RegisterModal from "@/components/modals/RegisterModal";
 import ToasterProvider from "@/providers/ToasterProvider";
 import getCurrentUser from "./actions/getCurrentUser";
+import EditModal from "@/components/modals/EditModal";
+import getUserById from "./actions/getUserById";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +32,8 @@ export default async function RootLayout({
         <ToasterProvider />
         <RegisterModal />
         <LoginModal />
+        <EditModal currentUser={currentUser} />
+
         <div className="container h-full mx-auto xl:px-30 max-w-6xl">
           <div className="grid  grid-cols-4 h-full">
             <Sidebar currentUser={currentUser} />

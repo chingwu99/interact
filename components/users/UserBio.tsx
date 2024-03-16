@@ -2,7 +2,7 @@
 
 // import useUser from "@/hooks/useUser";
 // import useFollow from "@/hooks/useFollow";
-// import useEditModal from "@/hooks/useEditModal";
+import useEditModal from "@/hooks/useEditModal";
 
 import Button from "../Button";
 import { UserWithFollowersCount } from "@/types";
@@ -22,7 +22,7 @@ const UserBio: React.FC<UserBioProps> = ({
   fetchedUser,
   currentUser,
 }) => {
-  // const editModal = useEditModal();
+  const editModal = useEditModal();
 
   // const { isFollowing, toggleFollow } = useFollow(userId);
   const createdAt = useMemo(() => {
@@ -37,8 +37,7 @@ const UserBio: React.FC<UserBioProps> = ({
     <div className="border-b-[1px] border-neutral-800 pb-4">
       <div className="flex justify-end p-2">
         {currentUser?.id === userId ? (
-          // <Button secondary label="Edit" onClick={editModal.onOpen} />
-          <Button secondary label="Edit" onClick={() => {}} />
+          <Button secondary label="Edit" onClick={editModal.onOpen} />
         ) : (
           // <Button
           //   onClick={toggleFollow}
