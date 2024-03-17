@@ -21,8 +21,8 @@ const UserHero: React.FC<UserHeroProps> = ({ fetchedUser, userId }) => {
             style={{ objectFit: "cover" }}
           />
         )}
-        <div className="absolute -bottom-16 left-4">
-          <Avatar userId={userId} isLarge hasBorder />
+        <div className="absolute -bottom-16 left-4 bg-black rounded-full ">
+          <Avatar userId={userId} fetchedUser={fetchedUser} isLarge hasBorder />
         </div>
       </div>
     </div>

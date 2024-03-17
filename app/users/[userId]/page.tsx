@@ -4,6 +4,7 @@ import UserBio from "@/components/users/UserBio";
 import UserHero from "@/components/users/UserHero";
 import getUserById from "@/app/actions/getUserById";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import PostFeed from "@/components/posts/PostFeed";
 
 interface IParams {
   userId?: string;
@@ -24,7 +25,7 @@ const UserView = async ({ params }: { params: IParams }) => {
         fetchedUser={fetchedUser}
         currentUser={currentUser}
       />
-      {/* <PostFeed userId={userId } /> */}
+      <PostFeed userId={userId} />
     </>
   );
 };

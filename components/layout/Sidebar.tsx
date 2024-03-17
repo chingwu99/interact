@@ -36,8 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
     {
       icon: FaUser,
       label: "Profile",
-      href: "/users/123",
-      // href: `/users/${currentUser?.id}`,
+      href: `/users/${currentUser?.id}`,
       auth: true,
     },
   ];

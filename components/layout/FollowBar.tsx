@@ -3,6 +3,9 @@
 import getUsers from "@/app/actions/getUsers";
 
 import Avatar from "../Avatar";
+import getUserById from "@/app/actions/getUserById";
+import FollowBarItem from "./FollowBarItem";
+import { Suspense } from "react";
 
 const FollowBar = async () => {
   // const { data: users = [] } = useUsers();
@@ -19,13 +22,7 @@ const FollowBar = async () => {
         <h2 className="text-white text-xl font-semibold">Who to follow</h2>
         <div className="flex flex-col gap-6 mt-4">
           {users.map((user: Record<string, any>) => (
-            <div key={user.id} className="flex flex-row gap-4">
-              <Avatar userId={user.id} />
-              <div className="flex flex-col">
-                <p className="text-white font-semibold text-sm">{user.name}</p>
-                <p className="text-neutral-400 text-sm">@{user.username}</p>
-              </div>
-            </div>
+            <FollowBarItem key={user.id} user={user} />
           ))}
         </div>
       </div>

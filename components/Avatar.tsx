@@ -1,37 +1,35 @@
-// "use client"
+"use client";
 
-import getUserById from "@/app/actions/getUserById";
 import Image from "next/image";
-import AvatarImage from "./AvatarImage";
-// import { useRouter } from "next/router";
-// import { useCallback } from "react";
-
-// import useUser from "@/hooks/useUser";
+import { UserWithFollowersCount } from "@/types";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 interface AvatarProps {
   userId: string;
   isLarge?: boolean;
   hasBorder?: boolean;
+  fetchedUser: UserWithFollowersCount | null;
 }
 
-const Avatar: React.FC<AvatarProps> = async ({
+const Avatar: React.FC<AvatarProps> = ({
   userId,
   isLarge,
   hasBorder,
+  fetchedUser,
 }) => {
-  // const router = useRouter();
+  const router = useRouter();
 
-  const fetchedUser = await getUserById({ userId: userId });
+  const onClick = useCallback(
+    (event: any) => {
+      event.stopPropagation();
 
-  // const { data: fetchedUser } = useUser(userId);
+      const url = `/users/${userId}`;
 
-  // const onClick = useCallback((event: any) => {
-  //   event.stopPropagation();
-
-  //   const url = `/users/${userId}`;
-
-  //   router.push(url);
-  // }, [router, userId]);
+      router.push(url);
+    },
+    [router, userId]
+  );
 
   return (
     <div
@@ -46,18 +44,16 @@ const Avatar: React.FC<AvatarProps> = async ({
         relative
       `}
     >
-      {/* <Image
+      <Image
         fill
         style={{
-          objectFit: 'cover',
-          borderRadius: '100%'
+          objectFit: "cover",
+          borderRadius: "100%",
         }}
         alt="Avatar"
         onClick={onClick}
-        src={fetchedUser?.profileImage || '/images/placeholder.png'}
-      /> */}
-
-      <AvatarImage userId={userId} fetchedUser={fetchedUser} />
+        src={fetchedUser?.profileImage || "/images/placeholder.png"}
+      />
     </div>
   );
 };
