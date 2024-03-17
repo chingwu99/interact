@@ -7,9 +7,14 @@ import useEditModal from "@/hooks/useEditModal";
 import Button from "../Button";
 import { UserWithFollowersCount } from "@/types";
 import { format } from "date-fns";
-import { useMemo } from "react";
 import { BiCalendar } from "react-icons/bi";
 import { User } from "@prisma/client";
+import useLoginModal from "@/hooks/useLoginModal";
+import { useRouter } from "next/navigation";
+
+import axios from "axios";
+import { useCallback, useMemo } from "react";
+import { toast } from "react-hot-toast";
 
 interface UserBioProps {
   fetchedUser: UserWithFollowersCount | null;
@@ -23,6 +28,8 @@ const UserBio: React.FC<UserBioProps> = ({
   currentUser,
 }) => {
   const editModal = useEditModal();
+  const loginModal = useLoginModal();
+  const router = useRouter();
 
   // const { isFollowing, toggleFollow } = useFollow(userId);
   const createdAt = useMemo(() => {
@@ -33,23 +40,47 @@ const UserBio: React.FC<UserBioProps> = ({
     return format(new Date(fetchedUser.createdAt), "MMMM yyyy");
   }, [fetchedUser?.createdAt]);
 
+  const isFollowing = useMemo(() => {
+    const list = currentUser?.followingIds || [];
+
+    return list.includes(userId);
+  }, [currentUser, userId]);
+
+  const toggleFollow = useCallback(async () => {
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
+
+    try {
+      let request;
+
+      if (isFollowing) {
+        request = () => axios.delete("/api/follow", { data: { userId } });
+      } else {
+        request = () => axios.post("/api/follow", { userId });
+      }
+
+      await request();
+
+      router.refresh();
+
+      toast.success("Success");
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  }, [currentUser, isFollowing, userId, router, loginModal]);
+
   return (
     <div className="border-b-[1px] border-neutral-800 pb-4">
       <div className="flex justify-end p-2">
         {currentUser?.id === userId ? (
           <Button secondary label="Edit" onClick={editModal.onOpen} />
         ) : (
-          // <Button
-          //   onClick={toggleFollow}
-          //   label={isFollowing ? 'Unfollow' : 'Follow'}
-          //   secondary={!isFollowing}
-          //   outline={isFollowing}
-          // />
           <Button
-            onClick={() => {}}
-            label={""}
-            secondary={undefined}
-            outline={undefined}
+            onClick={toggleFollow}
+            label={isFollowing ? "Unfollow" : "Follow"}
+            secondary={!isFollowing}
+            outline={isFollowing}
           />
         )}
       </div>
