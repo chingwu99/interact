@@ -19,7 +19,7 @@ interface FormProps {
   placeholder: string;
   isComment?: boolean;
   postId?: string;
-  currentUser?: User | null;
+  currentUser: User | null;
   fetchedUser: UserWithFollowersCount | null;
 }
 
