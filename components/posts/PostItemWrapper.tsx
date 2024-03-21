@@ -11,7 +11,7 @@ const PostItemWrapper: React.FC<PostItemWrapperProps> = async ({ post }) => {
   const fetchedUser = await getUserById({ userId: post.user.id });
   return (
     <PostItem
-      userId={post.user.id}
+      postId={post.id as string}
       key={post.id}
       data={post}
       currentUser={currentUser}

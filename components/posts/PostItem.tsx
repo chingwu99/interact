@@ -1,26 +1,29 @@
 "use client";
-import { useRouter } from "next/navigation";
+import axios from "axios";
 import { useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 import { formatDistanceToNowStrict } from "date-fns";
 
 import useLoginModal from "@/hooks/useLoginModal";
 import useCurrentUser from "@/hooks/useCurrentUser";
 // import useLike from '@/hooks/useLike';
+import { toast } from "react-hot-toast";
 
 import Avatar from "../Avatar";
 import { User } from "@prisma/client";
 import { UserWithFollowersCount } from "@/types";
+
 interface PostItemProps {
   data: Record<string, any>;
-  userId?: string;
-  currentUser?: User | null;
+  postId: string;
+  currentUser: User | null;
   fetchedUser: UserWithFollowersCount | null;
 }
 
 const PostItem: React.FC<PostItemProps> = ({
   data = {},
-  userId,
+  postId,
   fetchedUser,
   currentUser,
 }) => {
@@ -29,6 +32,35 @@ const PostItem: React.FC<PostItemProps> = ({
 
   // const { data: currentUser } = useCurrentUser();
   // const { hasLiked, toggleLike } = useLike({ postId: data.id, userId});
+  const hasLiked = useMemo(() => {
+    const list = data?.likedIds || [];
+
+    return list.includes(currentUser?.id);
+  }, [data, currentUser]);
+
+  const toggleLike = useCallback(async () => {
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
+
+    try {
+      let request;
+
+      if (hasLiked) {
+        request = () => axios.delete("/api/like", { data: { postId } });
+      } else {
+        request = () => axios.post("/api/like", { postId });
+      }
+
+      await request();
+
+      router.refresh();
+
+      toast.success("Success");
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  }, [currentUser, hasLiked, router, loginModal, postId]);
 
   const goToUser = useCallback(
     (ev: any) => {
@@ -50,17 +82,13 @@ const PostItem: React.FC<PostItemProps> = ({
         return loginModal.onOpen();
       }
 
-      // toggleLike();
+      toggleLike();
     },
-    [
-      loginModal,
-      currentUser,
-      // toggleLike
-    ]
+    [loginModal, currentUser, toggleLike]
   );
 
-  // const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
-  const LikeIcon = AiOutlineHeart;
+  const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
+
   const createdAt = useMemo(() => {
     if (!data?.createdAt) {
       return null;
@@ -140,8 +168,8 @@ const PostItem: React.FC<PostItemProps> = ({
                 hover:text-red-500
             "
             >
-              {/* <LikeIcon color={hasLiked ? 'red' : ''} size={20} /> */}
-              <LikeIcon color={"red"} size={20} />
+              <LikeIcon color={hasLiked ? "red" : ""} size={20} />
+
               <p>{data.likedIds.length}</p>
             </div>
           </div>
