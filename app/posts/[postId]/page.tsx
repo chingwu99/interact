@@ -38,7 +38,7 @@ const PostView = async ({ params }: PostViewProps) => {
         fetchedUser={currentFetchedUser}
         currentUser={currentUser}
       />
-      {/* <CommentFeed comments={fetchedPost?.comments} /> */}
+      <CommentFeed comments={fetchedPost?.comments} />
     </>
   );
 };

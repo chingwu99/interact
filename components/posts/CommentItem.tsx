@@ -1,18 +1,24 @@
+"use client";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 
 import Avatar from "../Avatar";
-import getUserById from "@/app/actions/getUserById";
+// import getUserById from "@/app/actions/getUserById";
+import { UserWithFollowersCount } from "@/types";
 
 interface CommentItemProps {
   data: Record<string, any>;
+  fetchedUser: UserWithFollowersCount | null;
 }
 
-const CommentItem: React.FC<CommentItemProps> = async ({ data = {} }) => {
+const CommentItem: React.FC<CommentItemProps> = ({
+  data = {},
+  fetchedUser,
+}) => {
   const router = useRouter();
 
-  const fetchedUser = await getUserById({ userId: data.user.id });
+  // const fetchedUser = await getUserById({ userId: data.user.id });
 
   const goToUser = useCallback(
     (ev: any) => {
