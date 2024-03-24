@@ -1,10 +1,12 @@
-import Header from "@/components/Header";
-
+import { redirect } from "next/navigation";
+// import actions
 import getCurrentUser from "../actions/getCurrentUser";
 import getNotificationsByUserId from "../actions/getNotificationsByUserId";
-import NotificationsFeed from "@/components/NotificationsFeed";
+// import types
 import { Notification } from "@prisma/client";
-import { redirect } from "next/navigation";
+// import components
+import Header from "@/components/Header";
+import NotificationsFeed from "@/components/NotificationsFeed";
 
 const Notifications = async () => {
   const currentUser = await getCurrentUser();

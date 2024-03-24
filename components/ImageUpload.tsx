@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useState } from "react";
+// import others
 import { useDropzone } from "react-dropzone";
 
 interface DropzoneProps {

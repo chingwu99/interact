@@ -1,4 +1,6 @@
+// import actions
 import getPosts from "@/app/actions/getPosts";
+// import components
 import PostItemWrapper from "./PostItemWrapper";
 
 interface PostFeedProps {

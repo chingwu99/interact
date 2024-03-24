@@ -1,18 +1,21 @@
 "use client";
 
-import useEditModal from "@/hooks/useEditModal";
-
-import Button from "../Button";
-import { UserWithFollowersCount } from "@/types";
-import { format } from "date-fns";
-import { BiCalendar } from "react-icons/bi";
-import { User } from "@prisma/client";
-import useLoginModal from "@/hooks/useLoginModal";
-import { useRouter } from "next/navigation";
-
-import axios from "axios";
 import { useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
+// import custom hook
+import useLoginModal from "@/hooks/useLoginModal";
+import useEditModal from "@/hooks/useEditModal";
+// import components
+import Button from "../Button";
+// import icons
+import { BiCalendar } from "react-icons/bi";
+// import type
+import { User } from "@prisma/client";
+import { UserWithFollowersCount } from "@/types";
+// import others
+import axios from "axios";
 import { toast } from "react-hot-toast";
+import { format } from "date-fns";
 
 interface UserBioProps {
   fetchedUser: UserWithFollowersCount | null;
@@ -25,9 +28,9 @@ const UserBio: React.FC<UserBioProps> = ({
   fetchedUser,
   currentUser,
 }) => {
+  const router = useRouter();
   const editModal = useEditModal();
   const loginModal = useLoginModal();
-  const router = useRouter();
 
   const createdAt = useMemo(() => {
     if (!fetchedUser?.createdAt) {

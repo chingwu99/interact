@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useCallback } from "react";
-import { IconType } from "react-icons";
+import { useCallback } from "react";
 import { useRouter } from "next/navigation";
-
+// import custom hook
 import useLoginModal from "@/hooks/useLoginModal";
-
-import { BsDot } from "react-icons/bs";
-
+// import type
 import { User } from "@prisma/client";
+import { IconType } from "react-icons";
+// import icons
+import { BsDot } from "react-icons/bs";
 
 interface SidebarItemProps {
   label: string;

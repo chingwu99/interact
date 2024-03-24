@@ -8,8 +8,6 @@ export default async function getPosts(params: IParams) {
   try {
     const { userId } = params;
 
-    console.log({ userId });
-
     let posts;
 
     if (userId && typeof userId === "string") {

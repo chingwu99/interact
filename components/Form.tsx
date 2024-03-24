@@ -1,16 +1,19 @@
 "use client";
-import axios from "axios";
-import { useCallback, useState } from "react";
-import { toast } from "react-hot-toast";
 
+import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
+// import custom hook
 import useLoginModal from "@/hooks/useLoginModal";
 import useRegisterModal from "@/hooks/useRegisterModal";
-
+// import components
 import Avatar from "./Avatar";
 import Button from "./Button";
-import { useRouter } from "next/navigation";
+// import type
 import { User } from "@prisma/client";
 import { UserWithFollowersCount } from "@/types";
+// import others
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 interface FormProps {
   placeholder: string;
@@ -27,9 +30,9 @@ const Form: React.FC<FormProps> = ({
   currentUser,
   fetchedUser,
 }) => {
+  const router = useRouter();
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
-  const router = useRouter();
 
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);

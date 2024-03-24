@@ -1,8 +1,11 @@
 "use client";
-import { BsTwitter } from "react-icons/bs";
+
 import { useEffect } from "react";
-import { Notification } from "@prisma/client";
 import { useRouter } from "next/navigation";
+// import type
+import { Notification } from "@prisma/client";
+// import icons
+import { BsTwitter } from "react-icons/bs";
 
 interface NotificationsFeedProps {
   fetchedNotifications: Notification[];

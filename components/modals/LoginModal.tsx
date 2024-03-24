@@ -1,13 +1,15 @@
 "use client";
+
 import { signIn } from "next-auth/react";
 import { useCallback, useState } from "react";
-import { toast } from "react-hot-toast";
-
+// import custom hook
 import useLoginModal from "@/hooks/useLoginModal";
 import useRegisterModal from "@/hooks/useRegisterModal";
-
+// import components
 import Input from "../Input";
 import Modal from "../Modal";
+// import others
+import { toast } from "react-hot-toast";
 
 const LoginModal = () => {
   const loginModal = useLoginModal();

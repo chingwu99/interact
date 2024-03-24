@@ -1,4 +1,6 @@
+// import actions
 import getUsers from "@/app/actions/getUsers";
+// import components
 import FollowBarItem from "./FollowBarItem";
 
 const FollowBar = async () => {

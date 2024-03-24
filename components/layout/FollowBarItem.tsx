@@ -1,4 +1,6 @@
+// import actions
 import getUserById from "@/app/actions/getUserById";
+// import components
 import Avatar from "../Avatar";
 
 interface FollowBarItemProps {

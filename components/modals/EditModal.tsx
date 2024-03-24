@@ -1,14 +1,18 @@
 "use client";
 
-import axios from "axios";
 import { useCallback, useState } from "react";
-import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
+// import custom hook
 import useEditModal from "@/hooks/useEditModal";
+// import type
+import { User } from "@prisma/client";
+// import components
 import Input from "../Input";
 import Modal from "../Modal";
 import ImageUpload from "../ImageUpload";
-import { User } from "@prisma/client";
-import { useRouter } from "next/navigation";
+// import others
+import { toast } from "react-hot-toast";
+import axios from "axios";
 
 interface EditModalProps {
   currentUser: User | null;

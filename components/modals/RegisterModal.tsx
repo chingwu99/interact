@@ -1,14 +1,16 @@
 "use client";
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import { useCallback, useState } from "react";
-import { signIn } from "next-auth/react";
 
+import { signIn } from "next-auth/react";
+import { useCallback, useState } from "react";
+// import custom hook
 import useLoginModal from "@/hooks/useLoginModal";
 import useRegisterModal from "@/hooks/useRegisterModal";
-
+// import components
 import Input from "../Input";
 import Modal from "../Modal";
+// import others
+import { toast } from "react-hot-toast";
+import axios from "axios";
 
 const RegisterModal = () => {
   const loginModal = useLoginModal();

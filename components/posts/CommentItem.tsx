@@ -4,7 +4,7 @@ import { useCallback, useMemo } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 
 import Avatar from "../Avatar";
-// import getUserById from "@/app/actions/getUserById";
+
 import { UserWithFollowersCount } from "@/types";
 
 interface CommentItemProps {
@@ -17,8 +17,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
   fetchedUser,
 }) => {
   const router = useRouter();
-
-  // const fetchedUser = await getUserById({ userId: data.user.id });
 
   const goToUser = useCallback(
     (ev: any) => {

@@ -1,17 +1,20 @@
 "use client";
-import axios from "axios";
+
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
-import { formatDistanceToNowStrict } from "date-fns";
-
+// import custom hook
 import useLoginModal from "@/hooks/useLoginModal";
-
-import { toast } from "react-hot-toast";
-
-import Avatar from "../Avatar";
+// import types
 import { User } from "@prisma/client";
 import { UserWithFollowersCount } from "@/types";
+// import components
+import Avatar from "../Avatar";
+// import icons
+import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
+// import others
+import { toast } from "react-hot-toast";
+import { formatDistanceToNowStrict } from "date-fns";
+import axios from "axios";
 
 interface PostItemProps {
   data: Record<string, any>;

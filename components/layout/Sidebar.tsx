@@ -1,15 +1,16 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-import { BiLogOut } from "react-icons/bi";
-import { BsHouseFill, BsBellFill } from "react-icons/bs";
-import { FaUser } from "react-icons/fa";
-
+// import type
+import { User } from "@prisma/client";
+// import components
 import SidebarItem from "./SidebarItem";
 import SidebarLogo from "./SidebarLogo";
 import SidebarInteractButton from "./SidebarInteractButton";
-
-import { User } from "@prisma/client";
+// import icons
+import { BiLogOut } from "react-icons/bi";
+import { BsHouseFill, BsBellFill } from "react-icons/bs";
+import { FaUser } from "react-icons/fa";
 
 interface SidebarProps {
   currentUser?: User | null;

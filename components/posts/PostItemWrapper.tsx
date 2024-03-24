@@ -1,5 +1,7 @@
+// import actions
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import getUserById from "@/app/actions/getUserById";
+// import components
 import PostItem from "./PostItem";
 
 interface PostItemWrapperProps {

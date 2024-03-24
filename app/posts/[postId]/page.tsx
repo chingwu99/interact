@@ -1,10 +1,12 @@
+// import actions
+import getPostById, { IParams } from "@/app/actions/getPostById";
+import getUserById from "@/app/actions/getUserById";
+import getCurrentUser from "@/app/actions/getCurrentUser";
+// import components
 import Header from "@/components/Header";
 import Form from "@/components/Form";
 import PostItem from "@/components/posts/PostItem";
 import CommentFeed from "@/components/posts/CommentFeed";
-import getPostById, { IParams } from "@/app/actions/getPostById";
-import getUserById from "@/app/actions/getUserById";
-import getCurrentUser from "@/app/actions/getCurrentUser";
 
 interface PostViewProps {
   params: IParams;

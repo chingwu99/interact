@@ -1,8 +1,10 @@
+// import actions
+import getUserById from "@/app/actions/getUserById";
+import getCurrentUser from "@/app/actions/getCurrentUser";
+// import components
 import Header from "@/components/Header";
 import UserBio from "@/components/users/UserBio";
 import UserHero from "@/components/users/UserHero";
-import getUserById from "@/app/actions/getUserById";
-import getCurrentUser from "@/app/actions/getCurrentUser";
 import PostFeed from "@/components/posts/PostFeed";
 
 interface IParams {

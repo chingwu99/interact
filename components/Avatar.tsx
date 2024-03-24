@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import { UserWithFollowersCount } from "@/types";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
+import Image from "next/image";
+// import type
+import { UserWithFollowersCount } from "@/types";
 
 interface AvatarProps {
   userId: string;

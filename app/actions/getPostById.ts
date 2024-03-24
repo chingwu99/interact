@@ -8,8 +8,6 @@ export default async function getPostById(params: IParams) {
   try {
     const { postId } = params;
 
-    console.log("postId", postId);
-
     const post = await prisma.post.findUnique({
       where: {
         id: postId,

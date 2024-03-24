@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback } from "react";
+// import icons
 import { AiOutlineClose } from "react-icons/ai";
+// import components
 import Button from "./Button";
 
 interface ModalProps {

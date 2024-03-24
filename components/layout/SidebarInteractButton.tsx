@@ -1,11 +1,13 @@
 "use client";
 
 import { useCallback } from "react";
-import { FaFeatherAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-
+// import custom hook
 import useLoginModal from "@/hooks/useLoginModal";
+// import type
 import { User } from "@prisma/client";
+// import icons
+import { FaFeatherAlt } from "react-icons/fa";
 
 interface SidebarInteractButtonProps {
   currentUser?: User | null;

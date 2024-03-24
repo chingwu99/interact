@@ -1,7 +1,7 @@
 import Image from "next/image";
-
+// import components
 import Avatar from "../Avatar";
-
+// import type
 import { UserWithFollowersCount } from "@/types";
 
 interface UserHeroProps {
