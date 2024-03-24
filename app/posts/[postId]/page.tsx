@@ -26,7 +26,7 @@ const PostView = async ({ params }: PostViewProps) => {
 
   return (
     <>
-      <Header showBackArrow label="Tweet" />
+      <Header showBackArrow label="Interact" />
       <PostItem
         postId={fetchedPost.id as string}
         data={fetchedPost}
@@ -36,7 +36,7 @@ const PostView = async ({ params }: PostViewProps) => {
       <Form
         postId={postId as string}
         isComment
-        placeholder="Tweet your reply"
+        placeholder="Interact your reply"
         avatarUser={currentFetchedUser}
         currentUser={currentUser}
       />

@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 // import custom hook
 import useLoginModal from "@/hooks/useLoginModal";
 import useRegisterModal from "@/hooks/useRegisterModal";
@@ -45,7 +46,7 @@ const Form: React.FC<FormProps> = ({
 
       await axios.post(url, { body });
 
-      toast.success("Tweet created");
+      toast.success("Interact created");
       setBody("");
 
       router.refresh();
@@ -96,14 +97,21 @@ const Form: React.FC<FormProps> = ({
               <Button
                 disabled={isLoading || !body}
                 onClick={onSubmit}
-                label="Tweet"
+                label="Interact"
               />
             </div>
           </div>
         </div>
       ) : (
-        <div className="py-8">
-          <h1 className="text-white text-2xl text-center mb-4 font-bold">
+        <div className="py-8 flex flex-col justify-center items-center">
+          <Image
+            alt="Logo"
+            src="/officialLogo.png"
+            quality={100}
+            height="71"
+            width="340"
+          />
+          <h1 className="text-white text-xl text-center mb-4 font-bold my-8">
             Welcome to Interact
           </h1>
           <div className="flex flex-row items-center justify-center gap-4">

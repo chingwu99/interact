@@ -5,6 +5,7 @@ import { useCallback } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 // import components
 import Button from "./Button";
+import Image from "next/image";
 
 interface ModalProps {
   isOpen?: boolean;
@@ -89,15 +90,30 @@ const Modal: React.FC<ModalProps> = ({
               flex 
               items-center 
               justify-between 
-              p-10 
+              p-10
+              pb-5
               rounded-t
               "
             >
-              <h3 className="text-3xl font-semibold text-white">{title}</h3>
+              <div>
+                <Image
+                  alt="Logo"
+                  src="/officialLogo.png"
+                  quality={100}
+                  height="36"
+                  width="170"
+                />
+
+                <h3 className="text-3xl  font-semibold mt-5  text-white">
+                  {title}
+                </h3>
+              </div>
+
               <button
                 className="
                   p-1 
                   ml-auto
+                  mb-auto
                   border-0 
                   text-white 
                   hover:opacity-70
@@ -109,7 +125,7 @@ const Modal: React.FC<ModalProps> = ({
               </button>
             </div>
             {/*body*/}
-            <div className="relative p-10 flex-auto">{body}</div>
+            <div className="relative px-10 flex-auto">{body}</div>
             {/*footer*/}
             <div className="flex flex-col gap-2 p-10">
               <Button
