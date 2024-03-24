@@ -6,8 +6,7 @@ import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 import { formatDistanceToNowStrict } from "date-fns";
 
 import useLoginModal from "@/hooks/useLoginModal";
-import useCurrentUser from "@/hooks/useCurrentUser";
-// import useLike from '@/hooks/useLike';
+
 import { toast } from "react-hot-toast";
 
 import Avatar from "../Avatar";
@@ -30,8 +29,6 @@ const PostItem: React.FC<PostItemProps> = ({
   const router = useRouter();
   const loginModal = useLoginModal();
 
-  // const { data: currentUser } = useCurrentUser();
-  // const { hasLiked, toggleLike } = useLike({ postId: data.id, userId});
   const hasLiked = useMemo(() => {
     const list = data?.likedIds || [];
 

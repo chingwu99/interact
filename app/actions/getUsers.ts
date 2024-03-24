@@ -12,11 +12,6 @@ export default async function getUsers() {
       return [];
     }
 
-    // const safeUsers = users.map((user) => ({
-    //   ...user,
-    //   createdAt: user.createdAt.toISOString(),
-    // }));
-
     return users;
   } catch (error: any) {
     throw new Error(error);

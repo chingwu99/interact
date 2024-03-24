@@ -5,9 +5,9 @@ import { IconType } from "react-icons";
 import { useRouter } from "next/navigation";
 
 import useLoginModal from "@/hooks/useLoginModal";
-// import useCurrentUser from '@/hooks/useCurrentUser';
+
 import { BsDot } from "react-icons/bs";
-// import { SafeUser } from "@/types";
+
 import { User } from "@prisma/client";
 
 interface SidebarItemProps {
@@ -16,7 +16,7 @@ interface SidebarItemProps {
   href?: string;
   onClick?: () => void;
   auth?: boolean;
-  // alert?: boolean;
+  alert?: boolean | null;
   currentUser?: User | null;
 }
 
@@ -26,13 +26,11 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   href,
   auth,
   onClick,
-  // alert
+  alert,
   currentUser,
 }) => {
   const router = useRouter();
   const loginModal = useLoginModal();
-
-  // const { data: currentUser } = useCurrentUser();
 
   const handleClick = useCallback(() => {
     if (onClick) {
@@ -68,7 +66,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       "
       >
         <Icon size={28} color="white" />
-        {/* {alert ? <BsDot className="text-sky-500 absolute -top-4 left-0" size={70} /> : null} */}
+        {alert ? (
+          <BsDot className="text-[#906B7F] absolute -top-4 left-0" size={70} />
+        ) : null}
       </div>
       <div
         className="
@@ -87,7 +87,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       >
         <Icon size={24} color="white" />
         <p className="hidden lg:block text-white text-xl">{label}</p>
-        {/* {alert ? <BsDot className="text-sky-500 absolute -top-4 left-0" size={70} /> : null} */}
+        {alert ? (
+          <BsDot className="text-[#906B7F] absolute -top-4 left-0" size={70} />
+        ) : null}
       </div>
     </div>
   );

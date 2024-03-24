@@ -1,15 +1,7 @@
-// import useUsers from '@/hooks/useUsers';
-
 import getUsers from "@/app/actions/getUsers";
-
-import Avatar from "../Avatar";
-import getUserById from "@/app/actions/getUserById";
 import FollowBarItem from "./FollowBarItem";
-import { Suspense } from "react";
 
 const FollowBar = async () => {
-  // const { data: users = [] } = useUsers();
-
   const users = await getUsers();
 
   if (users.length === 0) {

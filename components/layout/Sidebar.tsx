@@ -5,8 +5,6 @@ import { BiLogOut } from "react-icons/bi";
 import { BsHouseFill, BsBellFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 
-// import useCurrentUser from '@/hooks/useCurrentUser';
-
 import SidebarItem from "./SidebarItem";
 import SidebarLogo from "./SidebarLogo";
 import SidebarInteractButton from "./SidebarInteractButton";
@@ -18,8 +16,6 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
-  // const { data: currentUser } = useCurrentUser();
-
   const items = [
     {
       icon: BsHouseFill,
@@ -31,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
       label: "Notifications",
       href: "/notifications",
       auth: true,
-      // alert: currentUser?.hasNotification
+      alert: currentUser?.hasNotification,
     },
     {
       icon: FaUser,
@@ -49,7 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
           {items.map((item) => (
             <SidebarItem
               key={item.href}
-              // alert={item.alert}
+              alert={item.alert}
               auth={item.auth}
               href={item.href}
               icon={item.icon}
@@ -66,7 +62,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
               currentUser={currentUser}
             />
           )}
-          <SidebarInteractButton />
+          <SidebarInteractButton currentUser={currentUser} />
         </div>
       </div>
     </div>

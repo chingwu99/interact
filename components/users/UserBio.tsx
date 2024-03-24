@@ -1,7 +1,5 @@
 "use client";
 
-// import useUser from "@/hooks/useUser";
-// import useFollow from "@/hooks/useFollow";
 import useEditModal from "@/hooks/useEditModal";
 
 import Button from "../Button";
@@ -31,7 +29,6 @@ const UserBio: React.FC<UserBioProps> = ({
   const loginModal = useLoginModal();
   const router = useRouter();
 
-  // const { isFollowing, toggleFollow } = useFollow(userId);
   const createdAt = useMemo(() => {
     if (!fetchedUser?.createdAt) {
       return null;

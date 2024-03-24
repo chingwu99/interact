@@ -1,4 +1,3 @@
-// import PostFeed from "@/components/posts/PostFeed";
 import Header from "@/components/Header";
 import UserBio from "@/components/users/UserBio";
 import UserHero from "@/components/users/UserHero";
