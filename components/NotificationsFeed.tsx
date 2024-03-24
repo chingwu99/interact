@@ -2,10 +2,9 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 // import type
 import { Notification } from "@prisma/client";
-// import icons
-import { BsTwitter } from "react-icons/bs";
 
 interface NotificationsFeedProps {
   fetchedNotifications: Notification[];
@@ -35,7 +34,13 @@ const NotificationsFeed: React.FC<NotificationsFeedProps> = ({
           key={notification.id}
           className="flex flex-row items-center p-6 gap-4 border-b-[1px] border-neutral-800"
         >
-          <BsTwitter color="white" size={32} />
+          <Image
+            alt="Logo"
+            src="/images/components/layout/logo.svg"
+            quality={100}
+            height="50"
+            width="50"
+          />
           <p className="text-white">{notification.body}</p>
         </div>
       ))}

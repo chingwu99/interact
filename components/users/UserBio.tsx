@@ -18,14 +18,14 @@ import { toast } from "react-hot-toast";
 import { format } from "date-fns";
 
 interface UserBioProps {
-  fetchedUser: UserWithFollowersCount | null;
+  avatarUser: UserWithFollowersCount | null;
   userId: string;
   currentUser: User | null;
 }
 
 const UserBio: React.FC<UserBioProps> = ({
   userId,
-  fetchedUser,
+  avatarUser,
   currentUser,
 }) => {
   const router = useRouter();
@@ -33,12 +33,12 @@ const UserBio: React.FC<UserBioProps> = ({
   const loginModal = useLoginModal();
 
   const createdAt = useMemo(() => {
-    if (!fetchedUser?.createdAt) {
+    if (!avatarUser?.createdAt) {
       return null;
     }
 
-    return format(new Date(fetchedUser.createdAt), "MMMM yyyy");
-  }, [fetchedUser?.createdAt]);
+    return format(new Date(avatarUser.createdAt), "MMMM yyyy");
+  }, [avatarUser?.createdAt]);
 
   const isFollowing = useMemo(() => {
     const list = currentUser?.followingIds || [];
@@ -87,12 +87,12 @@ const UserBio: React.FC<UserBioProps> = ({
       <div className="mt-8 px-4">
         <div className="flex flex-col">
           <p className="text-white text-2xl font-semibold">
-            {fetchedUser?.name}
+            {avatarUser?.name}
           </p>
-          <p className="text-md text-neutral-500">@{fetchedUser?.username}</p>
+          <p className="text-md text-neutral-500">@{avatarUser?.username}</p>
         </div>
         <div className="flex flex-col mt-4">
-          <p className="text-white">{fetchedUser?.bio}</p>
+          <p className="text-white">{avatarUser?.bio}</p>
 
           <div
             className="
@@ -110,11 +110,11 @@ const UserBio: React.FC<UserBioProps> = ({
         </div>
         <div className="flex flex-row items-center mt-4 gap-6">
           <div className="flex flex-row items-center gap-1">
-            <p className="text-white">{fetchedUser?.followingIds?.length}</p>
+            <p className="text-white">{avatarUser?.followingIds?.length}</p>
             <p className="text-neutral-500">Following</p>
           </div>
           <div className="flex flex-row items-center gap-1">
-            <p className="text-white">{fetchedUser?.followersCount || 0}</p>
+            <p className="text-white">{avatarUser?.followersCount || 0}</p>
             <p className="text-neutral-500">Followers</p>
           </div>
         </div>

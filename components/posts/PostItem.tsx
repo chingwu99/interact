@@ -20,13 +20,13 @@ interface PostItemProps {
   data: Record<string, any>;
   postId: string;
   currentUser: User | null;
-  fetchedUser: UserWithFollowersCount | null;
+  avatarUser: UserWithFollowersCount | null;
 }
 
 const PostItem: React.FC<PostItemProps> = ({
   data = {},
   postId,
-  fetchedUser,
+  avatarUser,
   currentUser,
 }) => {
   const router = useRouter();
@@ -110,7 +110,7 @@ const PostItem: React.FC<PostItemProps> = ({
       "
     >
       <div className="flex flex-row items-start gap-3">
-        <Avatar userId={data.user.id} fetchedUser={fetchedUser} />
+        <Avatar userId={data.user.id} avatarUser={avatarUser} />
         <div>
           <div className="flex flex-row items-center gap-2">
             <p

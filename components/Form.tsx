@@ -20,7 +20,7 @@ interface FormProps {
   isComment?: boolean;
   postId?: string;
   currentUser: User | null;
-  fetchedUser: UserWithFollowersCount | null;
+  avatarUser: UserWithFollowersCount | null;
 }
 
 const Form: React.FC<FormProps> = ({
@@ -28,7 +28,7 @@ const Form: React.FC<FormProps> = ({
   isComment,
   postId,
   currentUser,
-  fetchedUser,
+  avatarUser,
 }) => {
   const router = useRouter();
   const registerModal = useRegisterModal();
@@ -61,7 +61,7 @@ const Form: React.FC<FormProps> = ({
       {currentUser ? (
         <div className="flex flex-row gap-4">
           <div>
-            <Avatar userId={currentUser?.id} fetchedUser={fetchedUser} />
+            <Avatar userId={currentUser?.id} avatarUser={avatarUser} />
           </div>
           <div className="w-full">
             <textarea
@@ -104,7 +104,7 @@ const Form: React.FC<FormProps> = ({
       ) : (
         <div className="py-8">
           <h1 className="text-white text-2xl text-center mb-4 font-bold">
-            Welcome to Twitter
+            Welcome to Interact
           </h1>
           <div className="flex flex-row items-center justify-center gap-4">
             <Button label="Login" onClick={loginModal.onOpen} />

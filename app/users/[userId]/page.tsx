@@ -14,16 +14,16 @@ interface IParams {
 const UserView = async ({ params }: { params: IParams }) => {
   const { userId } = params;
 
-  const fetchedUser = await getUserById(params);
+  const avatarUser = await getUserById(params);
   const currentUser = await getCurrentUser();
 
   return (
     <>
-      <Header showBackArrow label={fetchedUser?.name as string} />
-      <UserHero userId={userId as string} fetchedUser={fetchedUser} />
+      <Header showBackArrow label={avatarUser?.name as string} />
+      <UserHero userId={userId as string} avatarUser={avatarUser} />
       <UserBio
         userId={userId as string}
-        fetchedUser={fetchedUser}
+        avatarUser={avatarUser}
         currentUser={currentUser}
       />
       <PostFeed userId={userId} />

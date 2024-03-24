@@ -1,21 +1,20 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { formatDistanceToNowStrict } from "date-fns";
-
+// import components
 import Avatar from "../Avatar";
-
+// import type
 import { UserWithFollowersCount } from "@/types";
+// import others
+import { formatDistanceToNowStrict } from "date-fns";
 
 interface CommentItemProps {
   data: Record<string, any>;
-  fetchedUser: UserWithFollowersCount | null;
+  avatarUser: UserWithFollowersCount | null;
 }
 
-const CommentItem: React.FC<CommentItemProps> = ({
-  data = {},
-  fetchedUser,
-}) => {
+const CommentItem: React.FC<CommentItemProps> = ({ data = {}, avatarUser }) => {
   const router = useRouter();
 
   const goToUser = useCallback(
@@ -47,7 +46,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
       "
     >
       <div className="flex flex-row items-start gap-3">
-        <Avatar userId={data.user.id} fetchedUser={fetchedUser} />
+        <Avatar userId={data.user.id} avatarUser={avatarUser} />
         <div>
           <div className="flex flex-row items-center gap-2">
             <p

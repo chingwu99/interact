@@ -9,10 +9,10 @@ import PostFeed from "@/components/posts/PostFeed";
 const Home = async () => {
   const currentUser = await getCurrentUser();
 
-  let fetchedUser = null;
+  let avatarUser = null;
 
   if (currentUser) {
-    fetchedUser = await getUserById({ userId: currentUser?.id });
+    avatarUser = await getUserById({ userId: currentUser?.id });
   }
 
   return (
@@ -21,7 +21,7 @@ const Home = async () => {
       <Form
         placeholder="What's happening?"
         currentUser={currentUser}
-        fetchedUser={fetchedUser}
+        avatarUser={avatarUser}
       />
       <PostFeed />
     </>

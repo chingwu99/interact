@@ -10,8 +10,8 @@ interface CommentItemWrapperProps {
 const CommentItemWrapper: React.FC<CommentItemWrapperProps> = async ({
   comment,
 }) => {
-  const fetchedUser = await getUserById({ userId: comment.user.id });
-  return <CommentItem data={comment} fetchedUser={fetchedUser} />;
+  const avatarUser = await getUserById({ userId: comment.user.id });
+  return <CommentItem data={comment} avatarUser={avatarUser} />;
 };
 
 export default CommentItemWrapper;

@@ -8,11 +8,11 @@ interface FollowBarItemProps {
 }
 
 const FollowBarItem: React.FC<FollowBarItemProps> = async ({ user }) => {
-  const fetchedUser = await getUserById({ userId: user.id });
+  const avatarUser = await getUserById({ userId: user.id });
 
   return (
     <div key={user.id} className="flex flex-row gap-4">
-      <Avatar userId={user.id} fetchedUser={fetchedUser} />
+      <Avatar userId={user.id} avatarUser={avatarUser} />
 
       <div className="flex flex-col">
         <p className="text-white font-semibold text-sm">{user.name}</p>

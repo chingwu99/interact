@@ -10,14 +10,14 @@ interface PostItemWrapperProps {
 
 const PostItemWrapper: React.FC<PostItemWrapperProps> = async ({ post }) => {
   const currentUser = await getCurrentUser();
-  const fetchedUser = await getUserById({ userId: post.user.id });
+  const avatarUser = await getUserById({ userId: post.user.id });
   return (
     <PostItem
       postId={post.id as string}
       key={post.id}
       data={post}
       currentUser={currentUser}
-      fetchedUser={fetchedUser}
+      avatarUser={avatarUser}
     />
   );
 };

@@ -16,7 +16,7 @@ const PostView = async ({ params }: PostViewProps) => {
   const { postId } = params;
   const fetchedPost = await getPostById(params);
   const currentUser = await getCurrentUser();
-  const fetchedUser = await getUserById({ userId: fetchedPost.userId });
+  const avatarUser = await getUserById({ userId: fetchedPost.userId });
 
   let currentFetchedUser = null;
 
@@ -30,14 +30,14 @@ const PostView = async ({ params }: PostViewProps) => {
       <PostItem
         postId={fetchedPost.id as string}
         data={fetchedPost}
-        fetchedUser={fetchedUser}
+        avatarUser={avatarUser}
         currentUser={currentUser}
       />
       <Form
         postId={postId as string}
         isComment
         placeholder="Tweet your reply"
-        fetchedUser={currentFetchedUser}
+        avatarUser={currentFetchedUser}
         currentUser={currentUser}
       />
       <CommentFeed comments={fetchedPost?.comments} />
