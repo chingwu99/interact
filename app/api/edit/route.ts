@@ -1,20 +1,21 @@
-import { NextResponse } from "next/server";
-import getCurrentUser from "@/app/actions/getCurrentUser";
-import prisma from "@/libs/prismadb";
+import { NextResponse } from 'next/server'
+
+import getCurrentUser from '@/app/actions/getCurrentUser'
+import prisma from '@/libs/prismadb'
 
 export async function PATCH(request: Request) {
-  const currentUser = await getCurrentUser();
+  const currentUser = await getCurrentUser()
 
   if (!currentUser) {
-    return NextResponse.error();
+    return NextResponse.error()
   }
 
-  const body = await request.json();
+  const body = await request.json()
 
-  const { name, username, bio, profileImage, coverImage } = body;
+  const { name, username, bio, profileImage, coverImage } = body
 
   if (!name || !username) {
-    throw new Error("Missing fields");
+    throw new Error('Missing fields')
   }
 
   const updatedUser = await prisma.user.update({
@@ -28,7 +29,7 @@ export async function PATCH(request: Request) {
       profileImage,
       coverImage,
     },
-  });
+  })
 
-  return NextResponse.json(updatedUser);
+  return NextResponse.json(updatedUser)
 }

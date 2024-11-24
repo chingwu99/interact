@@ -1,42 +1,41 @@
-"use client";
+'use client'
 
-import { signOut } from "next-auth/react";
-// import type
-import { User } from "@prisma/client";
-// import components
-import SidebarItem from "./SidebarItem";
-import SidebarLogo from "./SidebarLogo";
-import SidebarInteractButton from "./SidebarInteractButton";
-// import icons
-import { BiLogOut } from "react-icons/bi";
-import { BsHouseFill, BsBellFill } from "react-icons/bs";
-import { FaUser } from "react-icons/fa";
+import { signOut } from 'next-auth/react'
+// @ts-ignore
+import { User } from '@prisma/client'
+import { BiLogOut } from 'react-icons/bi'
+import { BsHouseFill, BsBellFill } from 'react-icons/bs'
+import { FaUser } from 'react-icons/fa'
+
+import SidebarItem from './SidebarItem'
+import SidebarLogo from './SidebarLogo'
+import SidebarInteractButton from './SidebarInteractButton'
 
 interface SidebarProps {
-  currentUser?: User | null;
+  currentUser?: User | null
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
   const items = [
     {
       icon: BsHouseFill,
-      label: "Home",
-      href: "/",
+      label: 'Home',
+      href: '/',
     },
     {
       icon: BsBellFill,
-      label: "Notifications",
-      href: "/notifications",
+      label: 'Notifications',
+      href: '/notifications',
       auth: true,
       alert: currentUser?.hasNotification,
     },
     {
       icon: FaUser,
-      label: "Profile",
+      label: 'Profile',
       href: `/users/${currentUser?.id}`,
       auth: true,
     },
-  ];
+  ]
 
   return (
     <div className="col-span-1 h-full  md:pr-6 ">
@@ -56,18 +55,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
           ))}
 
           {currentUser && (
-            <SidebarItem
-              onClick={() => signOut()}
-              icon={BiLogOut}
-              label="Logout"
-              currentUser={currentUser}
-            />
+            <SidebarItem onClick={() => signOut()} icon={BiLogOut} label="Logout" currentUser={currentUser} />
           )}
           <SidebarInteractButton currentUser={currentUser} />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

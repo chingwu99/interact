@@ -1,101 +1,95 @@
-"use client";
+'use client'
 
-import { useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
-// import custom hook
-import useLoginModal from "@/hooks/useLoginModal";
-// import types
-import { User } from "@prisma/client";
-import { UserWithFollowersCount } from "@/types";
-// import components
-import Avatar from "../Avatar";
-// import icons
-import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
-// import others
-import { toast } from "react-hot-toast";
-import { formatDistanceToNowStrict } from "date-fns";
-import axios from "axios";
+import { useCallback, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-hot-toast'
+import { formatDistanceToNowStrict } from 'date-fns'
+import axios from 'axios'
+import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from 'react-icons/ai'
+
+import useLoginModal from '@/hooks/useLoginModal'
+
+// eslint-disable-next-line import/order
+import { User } from '@prisma/client'
+import { UserWithFollowersCount } from '@/types'
+
+import Avatar from '../Avatar'
 
 interface PostItemProps {
-  data: Record<string, any>;
-  postId: string;
-  currentUser: User | null;
-  avatarUser: UserWithFollowersCount | null;
+  data: Record<string, any>
+  postId: string
+  currentUser: User | null
+  avatarUser: UserWithFollowersCount | null
 }
 
-const PostItem: React.FC<PostItemProps> = ({
-  data = {},
-  postId,
-  avatarUser,
-  currentUser,
-}) => {
-  const router = useRouter();
-  const loginModal = useLoginModal();
+const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser, currentUser }) => {
+  const router = useRouter()
+  const loginModal = useLoginModal()
 
   const hasLiked = useMemo(() => {
-    const list = data?.likedIds || [];
+    const list = data?.likedIds || []
 
-    return list.includes(currentUser?.id);
-  }, [data, currentUser]);
+    return list.includes(currentUser?.id)
+  }, [data, currentUser])
 
   const toggleLike = useCallback(async () => {
     if (!currentUser) {
-      return loginModal.onOpen();
+      return loginModal.onOpen()
     }
 
     try {
-      let request;
+      let request
 
       if (hasLiked) {
-        request = () => axios.delete("/api/like", { data: { postId } });
+        request = () => axios.delete('/api/like', { data: { postId } })
       } else {
-        request = () => axios.post("/api/like", { postId });
+        request = () => axios.post('/api/like', { postId })
       }
 
-      await request();
+      await request()
 
-      router.refresh();
+      router.refresh()
 
-      toast.success("Success");
+      toast.success('Success')
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error('Something went wrong')
     }
-  }, [currentUser, hasLiked, router, loginModal, postId]);
+  }, [currentUser, hasLiked, router, loginModal, postId])
 
   const goToUser = useCallback(
     (ev: any) => {
-      ev.stopPropagation();
-      router.push(`/users/${data.user.id}`);
+      ev.stopPropagation()
+      router.push(`/users/${data.user.id}`)
     },
     [router, data.user.id]
-  );
+  )
 
   const goToPost = useCallback(() => {
-    router.push(`/posts/${data.id}`);
-  }, [router, data.id]);
+    router.push(`/posts/${data.id}`)
+  }, [router, data.id])
 
   const onLike = useCallback(
     async (ev: any) => {
-      ev.stopPropagation();
+      ev.stopPropagation()
 
       if (!currentUser) {
-        return loginModal.onOpen();
+        return loginModal.onOpen()
       }
 
-      toggleLike();
+      toggleLike()
     },
     [loginModal, currentUser, toggleLike]
-  );
+  )
 
-  const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
+  const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart
 
   const createdAt = useMemo(() => {
     if (!data?.createdAt) {
-      return null;
+      return null
     }
 
-    return formatDistanceToNowStrict(new Date(data.createdAt));
-  }, [data.createdAt]);
+    return formatDistanceToNowStrict(new Date(data.createdAt))
+  }, [data.createdAt])
 
   return (
     <div
@@ -168,7 +162,7 @@ const PostItem: React.FC<PostItemProps> = ({
                 hover:text-red-500
             "
             >
-              <LikeIcon color={hasLiked ? "red" : ""} size={20} />
+              <LikeIcon color={hasLiked ? 'red' : ''} size={20} />
 
               <p>{data.likedIds.length}</p>
             </div>
@@ -176,7 +170,7 @@ const PostItem: React.FC<PostItemProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PostItem;
+export default PostItem

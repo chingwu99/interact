@@ -1,21 +1,21 @@
-import prisma from "@/libs/prismadb";
+import prisma from '@/libs/prismadb'
 
 interface IParams {
-  userId?: string;
+  userId?: string
 }
 
 export default async function getNotificationsByUserId(params: IParams) {
   try {
-    const { userId } = params;
+    const { userId } = params
 
     const notifications = await prisma.notification.findMany({
       where: {
         userId,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
-    });
+    })
 
     await prisma.user.update({
       where: {
@@ -24,10 +24,10 @@ export default async function getNotificationsByUserId(params: IParams) {
       data: {
         hasNotification: false,
       },
-    });
+    })
 
-    return notifications;
+    return notifications
   } catch (error: any) {
-    throw new Error(error);
+    throw new Error(error)
   }
 }
