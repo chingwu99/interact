@@ -1,43 +1,44 @@
-import { NextResponse } from "next/server";
-import getCurrentUser from "@/app/actions/getCurrentUser";
-import prisma from "@/libs/prismadb";
+import { NextResponse } from 'next/server'
+
+import getCurrentUser from '@/app/actions/getCurrentUser'
+import prisma from '@/libs/prismadb'
 
 export async function POST(request: Request) {
-  const currentUser = await getCurrentUser();
+  const currentUser = await getCurrentUser()
 
   if (!currentUser) {
-    return NextResponse.error();
+    return NextResponse.error()
   }
 
-  const body = await request.json();
+  const body = await request.json()
 
-  const { userId } = body;
+  const { userId } = body
 
-  if (!userId || typeof userId !== "string") {
-    throw new Error("Invalid ID");
+  if (!userId || typeof userId !== 'string') {
+    throw new Error('Invalid ID')
   }
 
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
     },
-  });
+  })
 
   if (!user) {
-    throw new Error("Invalid ID");
+    throw new Error('Invalid ID')
   }
 
-  let updatedFollowingIds = [...(user.followingIds || [])];
+  let updatedFollowingIds = [...(user.followingIds || [])]
 
-  updatedFollowingIds.push(userId);
+  updatedFollowingIds.push(userId)
   // NOTIFICATION PART START
   try {
     await prisma.notification.create({
       data: {
-        body: "Someone followed you!",
+        body: 'Someone followed you!',
         userId,
       },
-    });
+    })
 
     await prisma.user.update({
       where: {
@@ -46,9 +47,9 @@ export async function POST(request: Request) {
       data: {
         hasNotification: true,
       },
-    });
+    })
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
   // NOTIFICATION PART END
 
@@ -59,41 +60,39 @@ export async function POST(request: Request) {
     data: {
       followingIds: updatedFollowingIds,
     },
-  });
+  })
 
-  return NextResponse.json(updatedUser);
+  return NextResponse.json(updatedUser)
 }
 
 export async function DELETE(request: Request) {
-  const currentUser = await getCurrentUser();
+  const currentUser = await getCurrentUser()
 
   if (!currentUser) {
-    return NextResponse.error();
+    return NextResponse.error()
   }
 
-  const body = await request.json();
+  const body = await request.json()
 
-  const { userId } = body;
+  const { userId } = body
 
-  if (!userId || typeof userId !== "string") {
-    throw new Error("Invalid ID");
+  if (!userId || typeof userId !== 'string') {
+    throw new Error('Invalid ID')
   }
 
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
     },
-  });
+  })
 
   if (!user) {
-    throw new Error("Invalid ID");
+    throw new Error('Invalid ID')
   }
 
-  let updatedFollowingIds = [...(user.followingIds || [])];
+  let updatedFollowingIds = [...(user.followingIds || [])]
 
-  updatedFollowingIds = updatedFollowingIds.filter(
-    (followingId) => followingId !== userId
-  );
+  updatedFollowingIds = updatedFollowingIds.filter((followingId) => followingId !== userId)
 
   const updatedUser = await prisma.user.update({
     where: {
@@ -102,7 +101,7 @@ export async function DELETE(request: Request) {
     data: {
       followingIds: updatedFollowingIds,
     },
-  });
+  })
 
-  return NextResponse.json(updatedUser);
+  return NextResponse.json(updatedUser)
 }

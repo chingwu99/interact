@@ -1,60 +1,55 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import { useCallback, useState } from "react";
+import Image from 'next/image'
+import { useCallback, useState } from 'react'
 // import others
-import { useDropzone } from "react-dropzone";
+import { useDropzone } from 'react-dropzone'
 
 interface DropzoneProps {
-  onChange: (base64: string) => void;
-  label: string;
-  value?: string;
-  disabled?: boolean;
+  // eslint-disable-next-line
+  onChange: (base64: string) => void
+  label: string
+  value?: string
+  disabled?: boolean
 }
 
-const ImageUpload: React.FC<DropzoneProps> = ({
-  onChange,
-  label,
-  value,
-  disabled,
-}) => {
-  const [base64, setBase64] = useState(value);
+const ImageUpload: React.FC<DropzoneProps> = ({ onChange, label, value, disabled }) => {
+  const [base64, setBase64] = useState(value)
 
   const handleChange = useCallback(
     (base64: string) => {
-      onChange(base64);
+      onChange(base64)
     },
     [onChange]
-  );
+  )
 
   const handleDrop = useCallback(
     (files: any) => {
-      const file = files[0];
-      const reader = new FileReader();
+      const file = files[0]
+      const reader = new FileReader()
       reader.onload = (event: any) => {
-        setBase64(event.target.result);
-        handleChange(event.target.result);
-      };
-      reader.readAsDataURL(file);
+        setBase64(event.target.result)
+        handleChange(event.target.result)
+      }
+      reader.readAsDataURL(file)
     },
     [handleChange]
-  );
+  )
 
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
     onDrop: handleDrop,
     disabled,
     accept: {
-      "image/jpeg": [],
-      "image/png": [],
+      'image/jpeg': [],
+      'image/png': [],
     },
-  });
+  })
 
   return (
     <div
       {...getRootProps({
-        className:
-          "w-full p-4 text-white text-center border-2 border-dotted rounded-md border-neutral-700",
+        className: 'w-full p-4 text-white text-center border-2 border-dotted rounded-md border-neutral-700',
       })}
     >
       <input {...getInputProps()} />
@@ -66,7 +61,7 @@ const ImageUpload: React.FC<DropzoneProps> = ({
         <p className="text-white">{label}</p>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ImageUpload;
+export default ImageUpload

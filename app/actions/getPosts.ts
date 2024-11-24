@@ -1,16 +1,16 @@
-import prisma from "@/libs/prismadb";
+import prisma from '@/libs/prismadb'
 
 interface IParams {
-  userId?: string | undefined;
+  userId?: string | undefined
 }
 
 export default async function getPosts(params: IParams) {
   try {
-    const { userId } = params;
+    const { userId } = params
 
-    let posts;
+    let posts
 
-    if (userId && typeof userId === "string") {
+    if (userId && typeof userId === 'string') {
       posts = await prisma.post.findMany({
         where: {
           userId,
@@ -20,9 +20,9 @@ export default async function getPosts(params: IParams) {
           comments: true,
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: 'desc',
         },
-      });
+      })
     } else {
       posts = await prisma.post.findMany({
         include: {
@@ -30,13 +30,13 @@ export default async function getPosts(params: IParams) {
           comments: true,
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: 'desc',
         },
-      });
+      })
     }
 
-    return posts;
+    return posts
   } catch (error: any) {
-    throw new Error(error);
+    throw new Error(error)
   }
 }

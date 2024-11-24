@@ -1,38 +1,37 @@
-"use client";
+'use client'
 
-import { useRouter } from "next/navigation";
-import { useCallback, useMemo } from "react";
-// import components
-import Avatar from "../Avatar";
-// import type
-import { UserWithFollowersCount } from "@/types";
-// import others
-import { formatDistanceToNowStrict } from "date-fns";
+import { useRouter } from 'next/navigation'
+import { useCallback, useMemo } from 'react'
+import { formatDistanceToNowStrict } from 'date-fns'
+
+import { UserWithFollowersCount } from '@/types'
+
+import Avatar from '../Avatar'
 
 interface CommentItemProps {
-  data: Record<string, any>;
-  avatarUser: UserWithFollowersCount | null;
+  data: Record<string, any>
+  avatarUser: UserWithFollowersCount | null
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({ data = {}, avatarUser }) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const goToUser = useCallback(
     (ev: any) => {
-      ev.stopPropagation();
+      ev.stopPropagation()
 
-      router.push(`/users/${data.user.id}`);
+      router.push(`/users/${data.user.id}`)
     },
     [router, data.user.id]
-  );
+  )
 
   const createdAt = useMemo(() => {
     if (!data?.createdAt) {
-      return null;
+      return null
     }
 
-    return formatDistanceToNowStrict(new Date(data.createdAt));
-  }, [data.createdAt]);
+    return formatDistanceToNowStrict(new Date(data.createdAt))
+  }, [data.createdAt])
 
   return (
     <div
@@ -78,7 +77,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ data = {}, avatarUser }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CommentItem;
+export default CommentItem
