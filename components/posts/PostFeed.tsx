@@ -1,14 +1,13 @@
-// import actions
-import getPosts from "@/app/actions/getPosts";
-// import components
-import PostItemWrapper from "./PostItemWrapper";
+import getPosts from '@/app/actions/getPosts'
+
+import PostItemWrapper from './PostItemWrapper'
 
 interface PostFeedProps {
-  userId?: string;
+  userId?: string
 }
 
 const PostFeed: React.FC<PostFeedProps> = async ({ userId }) => {
-  const posts = await getPosts({ userId });
+  const posts = await getPosts({ userId })
 
   return (
     <>
@@ -16,7 +15,7 @@ const PostFeed: React.FC<PostFeedProps> = async ({ userId }) => {
         <PostItemWrapper key={post.id} post={post} />
       ))}
     </>
-  );
-};
+  )
+}
 
-export default PostFeed;
+export default PostFeed

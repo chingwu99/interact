@@ -1,17 +1,15 @@
-import CommentItemWrapper from "./CommentItemWrapper";
+import CommentItemWrapper from './CommentItemWrapper'
 
 interface CommentFeedProps {
-  comments?: Record<string, any>[];
+  comments?: Record<string, any>[]
 }
 
-const CommentFeed: React.FC<CommentFeedProps> = ({ comments = [] }) => {
-  return (
-    <>
-      {comments.map((comment: Record<string, any>) => (
-        <CommentItemWrapper key={comment.id} comment={comment} />
-      ))}
-    </>
-  );
-};
+const CommentFeed: React.FC<CommentFeedProps> = ({ comments = [] }) => (
+  <>
+    {comments.map((comment: Record<string, any>) => (
+      <CommentItemWrapper key={comment.id} comment={comment} />
+    ))}
+  </>
+)
 
-export default CommentFeed;
+export default CommentFeed

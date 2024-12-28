@@ -1,14 +1,14 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 const SidebarLogo = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   return (
     <div
-      onClick={() => router.push("/")}
+      onClick={() => router.push('/')}
       className="
         rounded-full 
         h-20
@@ -22,15 +22,9 @@ const SidebarLogo = () => {
         cursor-pointer
     "
     >
-      <Image
-        alt="Logo"
-        src="/images/components/layout/logo.svg"
-        quality={100}
-        height="100"
-        width="100"
-      />
+      <Image alt="Logo" src="/images/components/layout/logo.svg" quality={100} height="100" width="100" />
     </div>
-  );
-};
+  )
+}
 
-export default SidebarLogo;
+export default SidebarLogo

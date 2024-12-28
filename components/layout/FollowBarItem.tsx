@@ -1,14 +1,13 @@
-// import actions
-import getUserById from "@/app/actions/getUserById";
-// import components
-import Avatar from "../Avatar";
+import getUserById from '@/app/actions/getUserById'
+
+import Avatar from '../Avatar'
 
 interface FollowBarItemProps {
-  user: Record<string, any>;
+  user: Record<string, any>
 }
 
 const FollowBarItem: React.FC<FollowBarItemProps> = async ({ user }) => {
-  const avatarUser = await getUserById({ userId: user.id });
+  const avatarUser = await getUserById({ userId: user.id })
 
   return (
     <div key={user.id} className="flex flex-row gap-4">
@@ -19,7 +18,7 @@ const FollowBarItem: React.FC<FollowBarItemProps> = async ({ user }) => {
         <p className="text-neutral-400 text-sm">@{user.username}</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default FollowBarItem;
+export default FollowBarItem

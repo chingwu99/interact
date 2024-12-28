@@ -1,62 +1,59 @@
-"use client";
+'use client'
 
-import { useCallback, useState } from "react";
-import { useRouter } from "next/navigation";
-// import custom hook
-import useEditModal from "@/hooks/useEditModal";
-// import type
-import { User } from "@prisma/client";
-// import components
-import Input from "../Input";
-import Modal from "../Modal";
-import ImageUpload from "../ImageUpload";
+import { useCallback, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-hot-toast'
+import axios from 'axios'
+// eslint-disable-next-line import/order
+// @ts-ignore
+import { User } from '@prisma/client'
+
+import useEditModal from '@/hooks/useEditModal'
+
+import Input from '../Input'
+import Modal from '../Modal'
+import ImageUpload from '../ImageUpload'
 // import others
-import { toast } from "react-hot-toast";
-import axios from "axios";
 
 interface EditModalProps {
-  currentUser: User | null;
+  currentUser: User | null
 }
 
 const EditModal: React.FC<EditModalProps> = ({ currentUser }) => {
-  const router = useRouter();
-  const editModal = useEditModal();
+  const router = useRouter()
+  const editModal = useEditModal()
 
-  const [profileImage, setProfileImage] = useState(
-    currentUser?.profileImage as string
-  );
-  const [coverImage, setCoverImage] = useState(
-    currentUser?.coverImage as string
-  );
-  const [name, setName] = useState(currentUser?.name as string);
-  const [username, setUsername] = useState(currentUser?.username as string);
-  const [bio, setBio] = useState(currentUser?.bio as string);
+  const [profileImage, setProfileImage] = useState(currentUser?.profileImage as string)
+  const [coverImage, setCoverImage] = useState(currentUser?.coverImage as string)
+  const [name, setName] = useState(currentUser?.name as string)
+  const [username, setUsername] = useState(currentUser?.username as string)
+  const [bio, setBio] = useState(currentUser?.bio as string)
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = useCallback(async () => {
     try {
-      setIsLoading(true);
+      setIsLoading(true)
 
-      await axios.patch("/api/edit", {
+      await axios.patch('/api/edit', {
         name,
         username,
         bio,
         profileImage,
         coverImage,
-      });
+      })
 
-      router.refresh();
+      router.refresh()
 
-      toast.success("Updated");
+      toast.success('Updated')
 
-      editModal.onClose();
+      editModal.onClose()
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error('Something went wrong')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, [editModal, name, username, bio, router, profileImage, coverImage]);
+  }, [editModal, name, username, bio, router, profileImage, coverImage])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -72,26 +69,16 @@ const EditModal: React.FC<EditModalProps> = ({ currentUser }) => {
         onChange={(image) => setCoverImage(image)}
         label="Upload cover image"
       />
-      <Input
-        placeholder="Name"
-        onChange={(e) => setName(e.target.value)}
-        value={name}
-        disabled={isLoading}
-      />
+      <Input placeholder="Name" onChange={(e) => setName(e.target.value)} value={name} disabled={isLoading} />
       <Input
         placeholder="Username"
         onChange={(e) => setUsername(e.target.value)}
         value={username}
         disabled={isLoading}
       />
-      <Input
-        placeholder="Bio"
-        onChange={(e) => setBio(e.target.value)}
-        value={bio}
-        disabled={isLoading}
-      />
+      <Input placeholder="Bio" onChange={(e) => setBio(e.target.value)} value={bio} disabled={isLoading} />
     </div>
-  );
+  )
 
   return (
     <Modal
@@ -103,7 +90,7 @@ const EditModal: React.FC<EditModalProps> = ({ currentUser }) => {
       onSubmit={onSubmit}
       body={bodyContent}
     />
-  );
-};
+  )
+}
 
-export default EditModal;
+export default EditModal

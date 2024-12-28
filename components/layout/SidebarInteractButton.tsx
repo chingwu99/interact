@@ -1,31 +1,28 @@
-"use client";
+'use client'
 
-import { useCallback } from "react";
-import { useRouter } from "next/navigation";
-// import custom hook
-import useLoginModal from "@/hooks/useLoginModal";
-// import type
-import { User } from "@prisma/client";
-// import icons
-import { FaFeatherAlt } from "react-icons/fa";
+import { useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { FaFeatherAlt } from 'react-icons/fa'
+// @ts-ignore
+import { User } from '@prisma/client'
+
+import useLoginModal from '@/hooks/useLoginModal'
 
 interface SidebarInteractButtonProps {
-  currentUser?: User | null;
+  currentUser?: User | null
 }
 
-const SidebarInteractButton: React.FC<SidebarInteractButtonProps> = ({
-  currentUser,
-}) => {
-  const router = useRouter();
-  const loginModal = useLoginModal();
+const SidebarInteractButton: React.FC<SidebarInteractButtonProps> = ({ currentUser }) => {
+  const router = useRouter()
+  const loginModal = useLoginModal()
 
   const onClick = useCallback(() => {
     if (!currentUser) {
-      return loginModal.onOpen();
+      return loginModal.onOpen()
     }
 
-    router.push("/");
-  }, [loginModal, router, currentUser]);
+    router.push('/')
+  }, [loginModal, router, currentUser])
 
   return (
     <div onClick={onClick} className="    pl-2 lg:pl-0">
@@ -76,7 +73,7 @@ const SidebarInteractButton: React.FC<SidebarInteractButtonProps> = ({
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SidebarInteractButton;
+export default SidebarInteractButton

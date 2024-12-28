@@ -1,29 +1,29 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-// import actions
-import getCurrentUser from "./actions/getCurrentUser";
-// import components
-import Sidebar from "@/components/layout/Sidebar";
-import FollowBar from "@/components/layout/FollowBar";
-import LoginModal from "@/components/modals/LoginModal";
-import RegisterModal from "@/components/modals/RegisterModal";
-import EditModal from "@/components/modals/EditModal";
-import ToasterProvider from "@/providers/ToasterProvider";
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
 
-const inter = Inter({ subsets: ["latin"] });
+import Sidebar from '@/components/layout/Sidebar'
+import FollowBar from '@/components/layout/FollowBar'
+import LoginModal from '@/components/modals/LoginModal'
+import RegisterModal from '@/components/modals/RegisterModal'
+import EditModal from '@/components/modals/EditModal'
+import ToasterProvider from '@/providers/ToasterProvider'
+
+import getCurrentUser from './actions/getCurrentUser'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "Interact",
-  description: "Interact",
-};
-
+  title: 'Interact',
+  description: 'Interact',
+}
+// eslint-disable-next-line react/function-component-definition
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
-  const currentUser = await getCurrentUser();
+  const currentUser = await getCurrentUser()
 
   return (
     <html lang="en">
@@ -52,5 +52,5 @@ export default async function RootLayout({
         </div>
       </body>
     </html>
-  );
+  )
 }

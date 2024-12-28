@@ -1,54 +1,43 @@
-"use client";
+'use client'
 
-import { useCallback } from "react";
-import { useRouter } from "next/navigation";
-// import custom hook
-import useLoginModal from "@/hooks/useLoginModal";
-// import type
-import { User } from "@prisma/client";
-import { IconType } from "react-icons";
-// import icons
-import { BsDot } from "react-icons/bs";
+import { useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { IconType } from 'react-icons'
+import { BsDot } from 'react-icons/bs'
+
+import useLoginModal from '@/hooks/useLoginModal'
+
+// eslint-disable-next-line import/order
+import { User } from '@prisma/client'
 
 interface SidebarItemProps {
-  label: string;
-  icon: IconType;
-  href?: string;
-  onClick?: () => void;
-  auth?: boolean;
-  alert?: boolean | null;
-  currentUser?: User | null;
+  label: string
+  icon: IconType
+  href?: string
+  onClick?: () => void
+  auth?: boolean
+  alert?: boolean | null
+  currentUser?: User | null
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({
-  label,
-  icon: Icon,
-  href,
-  auth,
-  onClick,
-  alert,
-  currentUser,
-}) => {
-  const router = useRouter();
-  const loginModal = useLoginModal();
+const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon: Icon, href, auth, onClick, alert, currentUser }) => {
+  const router = useRouter()
+  const loginModal = useLoginModal()
 
   const handleClick = useCallback(() => {
     if (onClick) {
-      return onClick();
+      return onClick()
     }
 
     if (auth && !currentUser) {
-      loginModal.onOpen();
+      loginModal.onOpen()
     } else if (href) {
-      router.push(href);
+      router.push(href)
     }
-  }, [router, href, auth, loginModal, onClick, currentUser]);
+  }, [router, href, auth, loginModal, onClick, currentUser])
 
   return (
-    <div
-      onClick={handleClick}
-      className="flex flex-row pl-2 lg:pl-0 items-center"
-    >
+    <div onClick={handleClick} className="flex flex-row pl-2 lg:pl-0 items-center">
       <div
         className="
         relative
@@ -66,9 +55,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       "
       >
         <Icon size={28} color="white" />
-        {alert ? (
-          <BsDot className="text-[#906B7F] absolute -top-4 left-0" size={70} />
-        ) : null}
+        {alert ? <BsDot className="text-[#906B7F] absolute -top-4 left-0" size={70} /> : null}
       </div>
       <div
         className="
@@ -87,12 +74,10 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       >
         <Icon size={24} color="white" />
         <p className="hidden lg:block text-white text-xl">{label}</p>
-        {alert ? (
-          <BsDot className="text-[#906B7F] absolute -top-4 left-0" size={70} />
-        ) : null}
+        {alert ? <BsDot className="text-[#906B7F] absolute -top-4 left-0" size={70} /> : null}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SidebarItem;
+export default SidebarItem
