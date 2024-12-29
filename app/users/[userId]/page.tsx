@@ -11,10 +11,10 @@ interface IParams {
   userId?: string
 }
 
-const UserView = async ({ params }: { params: IParams }) => {
-  const { userId } = params
+const UserView = async ({ params }: { params: Promise<IParams> }) => {
+  const { userId } = await params
 
-  const avatarUser = await getUserById(params)
+  const avatarUser = await getUserById({ userId })
   const currentUser = await getCurrentUser()
 
   return (

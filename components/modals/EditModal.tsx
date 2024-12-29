@@ -23,11 +23,11 @@ const EditModal: React.FC<EditModalProps> = ({ currentUser }) => {
   const router = useRouter()
   const editModal = useEditModal()
 
-  const [profileImage, setProfileImage] = useState(currentUser?.profileImage as string)
-  const [coverImage, setCoverImage] = useState(currentUser?.coverImage as string)
-  const [name, setName] = useState(currentUser?.name as string)
-  const [username, setUsername] = useState(currentUser?.username as string)
-  const [bio, setBio] = useState(currentUser?.bio as string)
+  const [profileImage, setProfileImage] = useState(currentUser?.profileImage ?? '')
+  const [coverImage, setCoverImage] = useState(currentUser?.coverImage ?? '')
+  const [name, setName] = useState(currentUser?.name ?? '')
+  const [username, setUsername] = useState(currentUser?.username ?? '')
+  const [bio, setBio] = useState(currentUser?.bio ?? '')
 
   const [isLoading, setIsLoading] = useState(false)
 

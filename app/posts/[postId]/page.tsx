@@ -9,12 +9,12 @@ import PostItem from '@/components/posts/PostItem'
 import CommentFeed from '@/components/posts/CommentFeed'
 
 interface PostViewProps {
-  params: IParams
+  params: Promise<IParams>
 }
 
 const PostView = async ({ params }: PostViewProps) => {
-  const { postId } = params
-  const fetchedPost = await getPostById(params)
+  const { postId } = await params
+  const fetchedPost = await getPostById({ postId })
   const currentUser = await getCurrentUser()
   const avatarUser = await getUserById({ userId: fetchedPost.userId })
 
