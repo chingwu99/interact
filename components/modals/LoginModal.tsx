@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useCallback, useState } from 'react'
 import { toast } from 'react-hot-toast'
@@ -11,6 +12,7 @@ import Input from '../Input'
 import Modal from '../Modal'
 
 const LoginModal = () => {
+  const router = useRouter()
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
 
@@ -22,20 +24,25 @@ const LoginModal = () => {
     try {
       setIsLoading(true)
 
-      await signIn('credentials', {
+      const result = await signIn('credentials', {
         email,
         password,
+        redirect: false,
       })
 
-      toast.success('Logged in')
-
-      loginModal.onClose()
+      if (result?.ok) {
+        toast.success('Logged in')
+        router.refresh()
+        loginModal.onClose()
+      } else {
+        toast.error(result?.error || 'Something went wrong')
+      }
     } catch (error) {
       toast.error('Something went wrong')
     } finally {
       setIsLoading(false)
     }
-  }, [email, password, loginModal])
+  }, [email, password, loginModal, router])
 
   const onToggle = useCallback(() => {
     loginModal.onClose()
@@ -75,10 +82,10 @@ const LoginModal = () => {
 
   return (
     <Modal
-      disabled={isLoading}
+      disabled={isLoading || !email || !password}
       isOpen={loginModal.isOpen}
-      title="Login"
-      actionLabel="Sign in"
+      title="Log in"
+      actionLabel="Log in"
       onClose={loginModal.onClose}
       onSubmit={onSubmit}
       body={bodyContent}

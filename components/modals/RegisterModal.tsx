@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useCallback, useState } from 'react'
 import { toast } from 'react-hot-toast'
@@ -14,13 +15,18 @@ import Modal from '../Modal'
 const RegisterModal = () => {
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
-
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
   const [name, setName] = useState('')
 
   const [isLoading, setIsLoading] = useState(false)
+
+  const isValidInput = useCallback(
+    () => email !== '' && password !== '' && username !== '' && name !== '',
+    [email, password, username, name]
+  )
 
   const onToggle = useCallback(() => {
     if (isLoading) {
@@ -35,29 +41,40 @@ const RegisterModal = () => {
     try {
       setIsLoading(true)
 
-      await axios.post('/api/register', {
-        email,
-        password,
-        username,
-        name,
-      })
-
-      setIsLoading(false)
+      // 註冊新帳戶
+      await axios
+        .post('/api/register', {
+          email,
+          password,
+          username,
+          name,
+        })
+        .catch((error) => {
+          throw new Error(error || 'Something went wrong')
+        })
 
       toast.success('Account created.')
 
-      signIn('credentials', {
+      // 自動登入
+      const result = await signIn('credentials', {
         email,
         password,
+        redirect: false,
       })
 
-      registerModal.onClose()
-    } catch (error) {
-      toast.error('Something went wrong')
+      if (result?.ok) {
+        toast.success('Logged in')
+        router.refresh()
+        registerModal.onClose()
+      } else {
+        throw new Error(result?.error || 'Something went wrong')
+      }
+    } catch (error: any) {
+      toast.error(error?.message || 'Something went wrong')
     } finally {
       setIsLoading(false)
     }
-  }, [email, password, registerModal, username, name])
+  }, [email, password, registerModal, username, name, router])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -91,7 +108,7 @@ const RegisterModal = () => {
             hover:underline
           "
         >
-          Sign in
+          Log in
         </span>
       </p>
     </div>
@@ -99,7 +116,7 @@ const RegisterModal = () => {
 
   return (
     <Modal
-      disabled={isLoading}
+      disabled={isLoading || !isValidInput()}
       isOpen={registerModal.isOpen}
       title="Create an account"
       actionLabel="Register"
