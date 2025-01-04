@@ -6,7 +6,9 @@
 
 # files
 modernizr.min.js
-vconsole.min.js
+vconsole.min.js 
+next-env.d.ts
 
 # test file
 **/*.test.js
+

@@ -1,8 +1,11 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useCallback, useState } from 'react'
 import { toast } from 'react-hot-toast'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import useLoginModal from '@/hooks/useLoginModal'
 import useRegisterModal from '@/hooks/useRegisterModal'
@@ -10,47 +13,74 @@ import useRegisterModal from '@/hooks/useRegisterModal'
 import Input from '../Input'
 import Modal from '../Modal'
 
+import { loginSchema, LoginFormValues } from './schema'
+
 const LoginModal = () => {
+  const router = useRouter()
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const onSubmit = useCallback(async () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onBlur',
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
+
+  const onSubmit = async (data: LoginFormValues) => {
     try {
       setIsLoading(true)
 
-      await signIn('credentials', {
-        email,
-        password,
+      const result = await signIn('credentials', {
+        email: data.email,
+        password: data.password,
+        redirect: false,
       })
 
-      toast.success('Logged in')
-
-      loginModal.onClose()
+      if (result?.ok) {
+        toast.success('Logged in')
+        router.refresh()
+        loginModal.onClose()
+      } else {
+        toast.error(result?.error || 'Something went wrong')
+      }
     } catch (error) {
       toast.error('Something went wrong')
     } finally {
       setIsLoading(false)
     }
-  }, [email, password, loginModal])
+  }
 
   const onToggle = useCallback(() => {
     loginModal.onClose()
+    reset()
     registerModal.onOpen()
-  }, [loginModal, registerModal])
+  }, [loginModal, registerModal, reset])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Input placeholder="Email" onChange={(e) => setEmail(e.target.value)} value={email} disabled={isLoading} />
-      <Input
+      <Input<LoginFormValues>
+        id="email"
+        register={register}
+        placeholder="Email"
+        disabled={isLoading}
+        errors={errors.email?.message}
+      />
+      <Input<LoginFormValues>
+        id="password"
+        register={register}
         placeholder="Password"
         type="password"
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
         disabled={isLoading}
+        errors={errors.password?.message}
       />
     </div>
   )
@@ -77,10 +107,13 @@ const LoginModal = () => {
     <Modal
       disabled={isLoading}
       isOpen={loginModal.isOpen}
-      title="Login"
-      actionLabel="Sign in"
-      onClose={loginModal.onClose}
-      onSubmit={onSubmit}
+      title="Log in"
+      actionLabel="Log in"
+      onClose={() => {
+        loginModal.onClose()
+        reset()
+      }}
+      onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
     />

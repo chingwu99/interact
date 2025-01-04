@@ -21,13 +21,6 @@
     ],
     "semi": ["error", "never"],
     "react/jsx-fragments": 0,
-    "max-len": [
-      "error",
-      {
-        "code": 120,
-        "ignoreUrls": true
-      }
-    ],
     "spaced-comment": [2, "always"],
     "import/named": "error",
     "import/newline-after-import": [
