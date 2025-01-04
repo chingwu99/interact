@@ -1,19 +1,19 @@
-import prisma from "@/libs/prismadb";
+import prisma from '@/libs/prismadb'
 
 export default async function getUsers() {
   try {
     const users = await prisma.user.findMany({
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
-    });
+    })
 
     if (!users) {
-      return [];
+      return []
     }
 
-    return users;
+    return users
   } catch (error: any) {
-    throw new Error(error);
+    throw new Error(error)
   }
 }

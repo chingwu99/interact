@@ -1,0 +1,14 @@
+# Third party
+**/node_modules
+
+# eliminate folder
+*_bak
+
+# files
+modernizr.min.js
+vconsole.min.js 
+next-env.d.ts
+
+# test file
+**/*.test.js
+

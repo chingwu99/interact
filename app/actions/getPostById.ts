@@ -1,12 +1,12 @@
-import prisma from "@/libs/prismadb";
+import prisma from '@/libs/prismadb'
 
 export interface IParams {
-  postId: string;
+  postId: string
 }
 
 export default async function getPostById(params: IParams) {
   try {
-    const { postId } = params;
+    const { postId } = params
 
     const post = await prisma.post.findUnique({
       where: {
@@ -19,16 +19,16 @@ export default async function getPostById(params: IParams) {
             user: true,
           },
           orderBy: {
-            createdAt: "desc",
+            createdAt: 'desc',
           },
         },
       },
-    });
+    })
 
     return {
       ...post,
-    };
+    }
   } catch (error: any) {
-    throw new Error(error);
+    throw new Error(error)
   }
 }

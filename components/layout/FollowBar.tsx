@@ -1,13 +1,12 @@
-// import actions
-import getUsers from "@/app/actions/getUsers";
-// import components
-import FollowBarItem from "./FollowBarItem";
+import getUsers from '@/app/actions/getUsers'
+
+import FollowBarItem from './FollowBarItem'
 
 const FollowBar = async () => {
-  const users = await getUsers();
+  const users = await getUsers()
 
   if (users.length === 0) {
-    return null;
+    return null
   }
 
   return (
@@ -21,7 +20,7 @@ const FollowBar = async () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default FollowBar;
+export default FollowBar

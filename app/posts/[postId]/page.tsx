@@ -1,27 +1,27 @@
 // import actions
-import getPostById, { IParams } from "@/app/actions/getPostById";
-import getUserById from "@/app/actions/getUserById";
-import getCurrentUser from "@/app/actions/getCurrentUser";
+import getPostById, { IParams } from '@/app/actions/getPostById'
+import getUserById from '@/app/actions/getUserById'
+import getCurrentUser from '@/app/actions/getCurrentUser'
 // import components
-import Header from "@/components/Header";
-import Form from "@/components/Form";
-import PostItem from "@/components/posts/PostItem";
-import CommentFeed from "@/components/posts/CommentFeed";
+import Header from '@/components/Header'
+import Form from '@/components/Form'
+import PostItem from '@/components/posts/PostItem'
+import CommentFeed from '@/components/posts/CommentFeed'
 
 interface PostViewProps {
-  params: IParams;
+  params: Promise<IParams>
 }
 
 const PostView = async ({ params }: PostViewProps) => {
-  const { postId } = params;
-  const fetchedPost = await getPostById(params);
-  const currentUser = await getCurrentUser();
-  const avatarUser = await getUserById({ userId: fetchedPost.userId });
+  const { postId } = await params
+  const fetchedPost = await getPostById({ postId })
+  const currentUser = await getCurrentUser()
+  const avatarUser = await getUserById({ userId: fetchedPost.userId })
 
-  let currentFetchedUser = null;
+  let currentFetchedUser = null
 
   if (currentUser) {
-    currentFetchedUser = await getUserById({ userId: currentUser?.id });
+    currentFetchedUser = await getUserById({ userId: currentUser?.id })
   }
 
   return (
@@ -42,7 +42,7 @@ const PostView = async ({ params }: PostViewProps) => {
       />
       <CommentFeed comments={fetchedPost?.comments} />
     </>
-  );
-};
+  )
+}
 
-export default PostView;
+export default PostView

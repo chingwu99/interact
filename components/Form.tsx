@@ -1,61 +1,73 @@
-"use client";
+'use client'
 
-import { useCallback, useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import axios from 'axios'
+import { toast } from 'react-hot-toast'
+// @ts-ignore
+import { User } from '@prisma/client'
+
+import { UserWithFollowersCount } from '@/types'
 // import custom hook
-import useLoginModal from "@/hooks/useLoginModal";
-import useRegisterModal from "@/hooks/useRegisterModal";
-// import components
-import Avatar from "./Avatar";
-import Button from "./Button";
-// import type
-import { User } from "@prisma/client";
-import { UserWithFollowersCount } from "@/types";
-// import others
-import axios from "axios";
-import { toast } from "react-hot-toast";
+import useLoginModal from '@/hooks/useLoginModal'
+import useRegisterModal from '@/hooks/useRegisterModal'
+
+import Avatar from './Avatar'
+import Button from './Button'
+import SubmitButton from './SubmitButton'
 
 interface FormProps {
-  placeholder: string;
-  isComment?: boolean;
-  postId?: string;
-  currentUser: User | null;
-  avatarUser: UserWithFollowersCount | null;
+  placeholder: string
+  isComment?: boolean
+  postId?: string
+  currentUser: User | null
+  avatarUser: UserWithFollowersCount | null
 }
 
-const Form: React.FC<FormProps> = ({
-  placeholder,
-  isComment,
-  postId,
-  currentUser,
-  avatarUser,
-}) => {
-  const router = useRouter();
-  const registerModal = useRegisterModal();
-  const loginModal = useLoginModal();
+const formSchema = z.object({
+  body: z.string().min(1, { message: 'Interact cannot be empty' }),
+})
 
-  const [body, setBody] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+type FormValues = z.infer<typeof formSchema>
 
-  const onSubmit = useCallback(async () => {
+const Form: React.FC<FormProps> = ({ placeholder, isComment, postId, currentUser, avatarUser }) => {
+  const router = useRouter()
+  const registerModal = useRegisterModal()
+  const loginModal = useLoginModal()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid },
+    reset,
+  } = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      body: '',
+    },
+  })
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  const onSubmit = async (values: FormValues) => {
     try {
-      setIsLoading(true);
+      setIsLoading(true)
+      const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts'
+      await axios.post(url, values)
 
-      const url = isComment ? `/api/comments?postId=${postId}` : "/api/posts";
-
-      await axios.post(url, { body });
-
-      toast.success("Interact created");
-      setBody("");
-
-      router.refresh();
+      toast.success('Interact created')
+      reset()
+      router.refresh()
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error('Something went wrong')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, [body, isComment, postId, router]);
+  }
 
   return (
     <div className="border-b-[1px] border-neutral-800 px-5 py-2">
@@ -64,12 +76,14 @@ const Form: React.FC<FormProps> = ({
           <div>
             <Avatar userId={currentUser?.id} avatarUser={avatarUser} />
           </div>
+
           <div className="w-full">
-            <textarea
-              disabled={isLoading}
-              onChange={(event) => setBody(event.target.value)}
-              value={body}
-              className="
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <textarea
+                disabled={isLoading}
+                id="body"
+                {...register('body')}
+                className="
                 disabled:opacity-80
                 peer
                 resize-none 
@@ -82,38 +96,27 @@ const Form: React.FC<FormProps> = ({
                 placeholder-neutral-500 
                 text-white
               "
-              placeholder={placeholder}
-            ></textarea>
-            <hr
-              className="
+                placeholder={placeholder}
+              />
+              <hr
+                className="
                 opacity-0 
                 peer-focus:opacity-100 
                 h-[1px] 
                 w-full 
                 border-neutral-800 
                 transition"
-            />
-            <div className="mt-4 flex flex-row justify-end">
-              <Button
-                disabled={isLoading || !body}
-                onClick={onSubmit}
-                label="Interact"
               />
-            </div>
+              <div className="mt-4 flex flex-row justify-end">
+                <SubmitButton disabled={isLoading || !isValid} type="submit" label="Interact" />
+              </div>
+            </form>
           </div>
         </div>
       ) : (
         <div className="py-8 flex flex-col justify-center items-center">
-          <Image
-            alt="Logo"
-            src="/officialLogo.png"
-            quality={100}
-            height="71"
-            width="340"
-          />
-          <h1 className="text-white text-xl text-center mb-4 font-bold my-8">
-            Welcome to Interact
-          </h1>
+          <Image alt="Logo" src="/officialLogo.png" quality={100} height="71" width="340" />
+          <h1 className="text-white text-xl text-center mb-4 font-bold my-8">Welcome to Interact</h1>
           <div className="flex flex-row items-center justify-center gap-4">
             <Button label="Login" onClick={loginModal.onOpen} />
             <Button label="Register" onClick={registerModal.onOpen} secondary />
@@ -121,7 +124,7 @@ const Form: React.FC<FormProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Form;
+export default Form

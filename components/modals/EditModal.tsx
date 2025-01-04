@@ -1,97 +1,107 @@
-"use client";
+'use client'
 
-import { useCallback, useState } from "react";
-import { useRouter } from "next/navigation";
-// import custom hook
-import useEditModal from "@/hooks/useEditModal";
-// import type
-import { User } from "@prisma/client";
-// import components
-import Input from "../Input";
-import Modal from "../Modal";
-import ImageUpload from "../ImageUpload";
-// import others
-import { toast } from "react-hot-toast";
-import axios from "axios";
+import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-hot-toast'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
+// @ts-ignore
+import { User } from '@prisma/client'
+
+import useEditModal from '@/hooks/useEditModal'
+
+import Input from '../Input'
+import Modal from '../Modal'
+import ImageUpload from '../ImageUpload'
+
+import { editSchema, EditFormValues } from './schema'
 
 interface EditModalProps {
-  currentUser: User | null;
+  currentUser: User | null
 }
 
 const EditModal: React.FC<EditModalProps> = ({ currentUser }) => {
-  const router = useRouter();
-  const editModal = useEditModal();
+  const router = useRouter()
+  const editModal = useEditModal()
+  const [isLoading, setIsLoading] = useState(false)
 
-  const [profileImage, setProfileImage] = useState(
-    currentUser?.profileImage as string
-  );
-  const [coverImage, setCoverImage] = useState(
-    currentUser?.coverImage as string
-  );
-  const [name, setName] = useState(currentUser?.name as string);
-  const [username, setUsername] = useState(currentUser?.username as string);
-  const [bio, setBio] = useState(currentUser?.bio as string);
+  const defaultValues = useMemo(
+    () => ({
+      name: currentUser?.name || '',
+      username: currentUser?.username || '',
+      bio: currentUser?.bio || '',
+      profileImage: currentUser?.profileImage || '',
+      coverImage: currentUser?.coverImage || '',
+    }),
+    [currentUser]
+  )
 
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+    watch,
+  } = useForm<EditFormValues>({
+    resolver: zodResolver(editSchema),
+    mode: 'onBlur',
+    defaultValues,
+  })
 
-  const onSubmit = useCallback(async () => {
-    try {
-      setIsLoading(true);
+  const profileImage = watch('profileImage')
+  const coverImage = watch('coverImage')
 
-      await axios.patch("/api/edit", {
-        name,
-        username,
-        bio,
-        profileImage,
-        coverImage,
-      });
-
-      router.refresh();
-
-      toast.success("Updated");
-
-      editModal.onClose();
-    } catch (error) {
-      toast.error("Something went wrong");
-    } finally {
-      setIsLoading(false);
+  useEffect(() => {
+    if (editModal.isOpen) {
+      reset(defaultValues)
     }
-  }, [editModal, name, username, bio, router, profileImage, coverImage]);
+  }, [editModal.isOpen, currentUser, reset, defaultValues])
+
+  const onSubmit = async (data: EditFormValues) => {
+    try {
+      setIsLoading(true)
+
+      await axios.patch('/api/edit', data)
+
+      router.refresh()
+      toast.success('Updated')
+      editModal.onClose()
+    } catch (error) {
+      toast.error('Something went wrong')
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <ImageUpload
         value={profileImage}
         disabled={isLoading}
-        onChange={(image) => setProfileImage(image)}
+        onChange={(image) => setValue('profileImage', image)}
         label="Upload profile image"
       />
       <ImageUpload
         value={coverImage}
         disabled={isLoading}
-        onChange={(image) => setCoverImage(image)}
+        onChange={(image) => setValue('coverImage', image)}
         label="Upload cover image"
       />
+
+      <Input id="name" register={register} placeholder="Name" disabled={isLoading} errors={errors.name?.message} />
       <Input
-        placeholder="Name"
-        onChange={(e) => setName(e.target.value)}
-        value={name}
-        disabled={isLoading}
-      />
-      <Input
+        id="username"
+        register={register}
         placeholder="Username"
-        onChange={(e) => setUsername(e.target.value)}
-        value={username}
         disabled={isLoading}
+        errors={errors.username?.message}
       />
-      <Input
-        placeholder="Bio"
-        onChange={(e) => setBio(e.target.value)}
-        value={bio}
-        disabled={isLoading}
-      />
+      <Input id="bio" register={register} placeholder="Bio" disabled={isLoading} errors={errors.bio?.message} />
     </div>
-  );
+  )
 
   return (
     <Modal
@@ -99,11 +109,14 @@ const EditModal: React.FC<EditModalProps> = ({ currentUser }) => {
       isOpen={editModal.isOpen}
       title="Edit your profile"
       actionLabel="Save"
-      onClose={editModal.onClose}
-      onSubmit={onSubmit}
+      onClose={() => {
+        editModal.onClose()
+        reset()
+      }}
+      onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
     />
-  );
-};
+  )
+}
 
-export default EditModal;
+export default EditModal

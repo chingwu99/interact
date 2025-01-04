@@ -1,43 +1,38 @@
-"use client";
+'use client'
 
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
-import Image from "next/image";
-// import type
-import { UserWithFollowersCount } from "@/types";
+import { useRouter } from 'next/navigation'
+import { useCallback } from 'react'
+import Image from 'next/image'
+
+import { UserWithFollowersCount } from '@/types'
 
 interface AvatarProps {
-  userId: string;
-  isLarge?: boolean;
-  hasBorder?: boolean;
-  avatarUser: UserWithFollowersCount | null;
+  userId: string
+  isLarge?: boolean
+  hasBorder?: boolean
+  avatarUser: UserWithFollowersCount | null
 }
 
-const Avatar: React.FC<AvatarProps> = ({
-  userId,
-  isLarge,
-  hasBorder,
-  avatarUser,
-}) => {
-  const router = useRouter();
+const Avatar: React.FC<AvatarProps> = ({ userId, isLarge, hasBorder, avatarUser }) => {
+  const router = useRouter()
 
   const onClick = useCallback(
     (event: any) => {
-      event.stopPropagation();
+      event.stopPropagation()
 
-      const url = `/users/${userId}`;
+      const url = `/users/${userId}`
 
-      router.push(url);
+      router.push(url)
     },
     [router, userId]
-  );
+  )
 
   return (
     <div
       className={`
-        ${hasBorder ? "border-4 border-black" : ""}
-        ${isLarge ? "h-32" : "h-12"}
-        ${isLarge ? "w-32" : "w-12"}
+        ${hasBorder ? 'border-4 border-black' : ''}
+        ${isLarge ? 'h-32' : 'h-12'}
+        ${isLarge ? 'w-32' : 'w-12'}
         rounded-full 
         hover:opacity-90 
         transition 
@@ -48,15 +43,15 @@ const Avatar: React.FC<AvatarProps> = ({
       <Image
         fill
         style={{
-          objectFit: "cover",
-          borderRadius: "100%",
+          objectFit: 'cover',
+          borderRadius: '100%',
         }}
         alt="Avatar"
         onClick={onClick}
-        src={avatarUser?.profileImage || "/images/placeholder.png"}
+        src={avatarUser?.profileImage || '/images/placeholder.png'}
       />
     </div>
-  );
-};
+  )
+}
 
-export default Avatar;
+export default Avatar

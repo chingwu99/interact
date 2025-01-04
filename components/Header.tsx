@@ -1,21 +1,21 @@
-"use client";
+'use client'
 
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useRouter } from 'next/navigation'
+import { useCallback } from 'react'
 // import icons
-import { BiArrowBack } from "react-icons/bi";
+import { BiArrowBack } from 'react-icons/bi'
 
 interface HeaderProps {
-  showBackArrow?: boolean;
-  label: string;
+  showBackArrow?: boolean
+  label: string
 }
 
 const Header: React.FC<HeaderProps> = ({ showBackArrow, label }) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleBack = useCallback(() => {
-    router.back();
-  }, [router]);
+    router.back()
+  }, [router])
 
   return (
     <div className="border-b-[1px] border-neutral-800 p-5">
@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ showBackArrow, label }) => {
         <h1 className="text-white text-xl font-semibold">{label}</h1>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

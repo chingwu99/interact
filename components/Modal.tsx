@@ -1,55 +1,42 @@
-"use client";
+'use client'
 
-import { useCallback } from "react";
-// import icons
-import { AiOutlineClose } from "react-icons/ai";
-// import components
-import Button from "./Button";
-import Image from "next/image";
+import { useCallback } from 'react'
+import { AiOutlineClose } from 'react-icons/ai'
+import Image from 'next/image'
+
+import Button from './SubmitButton'
 
 interface ModalProps {
-  isOpen?: boolean;
-  onClose: () => void;
-  onSubmit: () => void;
-  title?: string;
-  body?: React.ReactElement;
-  footer?: React.ReactElement;
-  actionLabel: string;
-  disabled?: boolean;
+  isOpen?: boolean
+  onClose: () => void
+  onSubmit: () => void
+  title?: string
+  body?: React.ReactElement
+  footer?: React.ReactElement
+  actionLabel: string
+  disabled?: boolean
 }
 
-const Modal: React.FC<ModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  title,
-  body,
-  actionLabel,
-  footer,
-  disabled,
-}) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit, title, body, actionLabel, footer, disabled }) => {
   const handleClose = useCallback(() => {
     if (disabled) {
-      return;
+      return
     }
 
-    onClose();
-  }, [onClose, disabled]);
-
-  const handleSubmit = useCallback(() => {
-    if (disabled) {
-      return;
-    }
-
-    onSubmit();
-  }, [onSubmit, disabled]);
+    onClose()
+  }, [onClose, disabled])
 
   if (!isOpen) {
-    return null;
+    return null
   }
 
   return (
-    <>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        onSubmit()
+      }}
+    >
       <div
         className="
           justify-center 
@@ -67,7 +54,7 @@ const Modal: React.FC<ModalProps> = ({
         "
       >
         <div className="relative w-full lg:w-3/6 my-6 mx-auto lg:max-w-3xl h-full lg:h-auto">
-          {/*content*/}
+          {/* content*/}
           <div
             className="
             h-full
@@ -84,7 +71,7 @@ const Modal: React.FC<ModalProps> = ({
             focus:outline-none
             "
           >
-            {/*header*/}
+            {/* header */}
             <div
               className="
               flex 
@@ -96,17 +83,9 @@ const Modal: React.FC<ModalProps> = ({
               "
             >
               <div>
-                <Image
-                  alt="Logo"
-                  src="/officialLogo.png"
-                  quality={100}
-                  height="36"
-                  width="170"
-                />
+                <Image alt="Logo" src="/officialLogo.png" quality={100} height="36" width="170" />
 
-                <h3 className="text-3xl  font-semibold mt-5  text-white">
-                  {title}
-                </h3>
+                <h3 className="text-3xl  font-semibold mt-5  text-white">{title}</h3>
               </div>
 
               <button
@@ -124,25 +103,18 @@ const Modal: React.FC<ModalProps> = ({
                 <AiOutlineClose size={20} />
               </button>
             </div>
-            {/*body*/}
+            {/* body */}
             <div className="relative px-10 flex-auto">{body}</div>
-            {/*footer*/}
+            {/* footer */}
             <div className="flex flex-col gap-2 p-10">
-              <Button
-                disabled={disabled}
-                label={actionLabel}
-                secondary
-                fullWidth
-                large
-                onClick={handleSubmit}
-              />
+              <Button disabled={disabled} label={actionLabel} secondary fullWidth large type="submit" />
               {footer}
             </div>
           </div>
         </div>
       </div>
-    </>
-  );
-};
+    </form>
+  )
+}
 
-export default Modal;
+export default Modal

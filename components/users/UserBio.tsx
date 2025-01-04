@@ -1,74 +1,68 @@
-"use client";
+'use client'
 
-import { useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
-// import custom hook
-import useLoginModal from "@/hooks/useLoginModal";
-import useEditModal from "@/hooks/useEditModal";
-// import components
-import Button from "../Button";
-// import icons
-import { BiCalendar } from "react-icons/bi";
-// import type
-import { User } from "@prisma/client";
-import { UserWithFollowersCount } from "@/types";
-// import others
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import { format } from "date-fns";
+import { useCallback, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
+import { format } from 'date-fns'
+import axios from 'axios'
+import { toast } from 'react-hot-toast'
+import { BiCalendar } from 'react-icons/bi'
+// @ts-ignore
+import { User } from '@prisma/client'
+
+import useLoginModal from '@/hooks/useLoginModal'
+import useEditModal from '@/hooks/useEditModal'
+import { UserWithFollowersCount } from '@/types'
+
+import Button from '../Button'
 
 interface UserBioProps {
-  avatarUser: UserWithFollowersCount | null;
-  userId: string;
-  currentUser: User | null;
+  avatarUser: UserWithFollowersCount | null
+  userId: string
+  currentUser: User | null
 }
 
-const UserBio: React.FC<UserBioProps> = ({
-  userId,
-  avatarUser,
-  currentUser,
-}) => {
-  const router = useRouter();
-  const editModal = useEditModal();
-  const loginModal = useLoginModal();
+const UserBio: React.FC<UserBioProps> = ({ userId, avatarUser, currentUser }) => {
+  const router = useRouter()
+  const editModal = useEditModal()
+  const loginModal = useLoginModal()
 
   const createdAt = useMemo(() => {
     if (!avatarUser?.createdAt) {
-      return null;
+      return null
     }
 
-    return format(new Date(avatarUser.createdAt), "MMMM yyyy");
-  }, [avatarUser?.createdAt]);
+    return format(new Date(avatarUser.createdAt), 'MMMM yyyy')
+  }, [avatarUser?.createdAt])
 
   const isFollowing = useMemo(() => {
-    const list = currentUser?.followingIds || [];
+    const list = currentUser?.followingIds || []
 
-    return list.includes(userId);
-  }, [currentUser, userId]);
+    return list.includes(userId)
+  }, [currentUser, userId])
 
   const toggleFollow = useCallback(async () => {
     if (!currentUser) {
-      return loginModal.onOpen();
+      return loginModal.onOpen()
     }
 
     try {
-      let request;
+      let request
 
       if (isFollowing) {
-        request = () => axios.delete("/api/follow", { data: { userId } });
+        request = () => axios.delete('/api/follow', { data: { userId } })
       } else {
-        request = () => axios.post("/api/follow", { userId });
+        request = () => axios.post('/api/follow', { userId })
       }
 
-      await request();
+      await request()
 
-      router.refresh();
+      router.refresh()
 
-      toast.success("Success");
+      toast.success('Success')
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error('Something went wrong')
     }
-  }, [currentUser, isFollowing, userId, router, loginModal]);
+  }, [currentUser, isFollowing, userId, router, loginModal])
 
   return (
     <div className="border-b-[1px] border-neutral-800 pb-4">
@@ -78,7 +72,7 @@ const UserBio: React.FC<UserBioProps> = ({
         ) : (
           <Button
             onClick={toggleFollow}
-            label={isFollowing ? "Unfollow" : "Follow"}
+            label={isFollowing ? 'Unfollow' : 'Follow'}
             secondary={!isFollowing}
             outline={isFollowing}
           />
@@ -86,9 +80,7 @@ const UserBio: React.FC<UserBioProps> = ({
       </div>
       <div className="mt-8 px-4">
         <div className="flex flex-col">
-          <p className="text-white text-2xl font-semibold">
-            {avatarUser?.name}
-          </p>
+          <p className="text-white text-2xl font-semibold">{avatarUser?.name}</p>
           <p className="text-md text-neutral-500">@{avatarUser?.username}</p>
         </div>
         <div className="flex flex-col mt-4">
@@ -120,7 +112,7 @@ const UserBio: React.FC<UserBioProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserBio;
+export default UserBio

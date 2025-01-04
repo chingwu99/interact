@@ -1,35 +1,36 @@
-import prisma from "@/libs/prismadb";
-import { NextResponse } from "next/server";
-import getCurrentUser from "@/app/actions/getCurrentUser";
+import { NextResponse } from 'next/server'
+
+import prisma from '@/libs/prismadb'
+import getCurrentUser from '@/app/actions/getCurrentUser'
 
 export async function POST(request: Request) {
-  const currentUser = await getCurrentUser();
+  const currentUser = await getCurrentUser()
 
   if (!currentUser) {
-    return NextResponse.error();
+    return NextResponse.error()
   }
 
-  const body = await request.json();
+  const body = await request.json()
 
-  const { postId } = body;
+  const { postId } = body
 
-  if (!postId || typeof postId !== "string") {
-    throw new Error("Invalid ID");
+  if (!postId || typeof postId !== 'string') {
+    throw new Error('Invalid ID')
   }
 
   const post = await prisma.post.findUnique({
     where: {
       id: postId,
     },
-  });
+  })
 
   if (!post) {
-    throw new Error("Invalid ID");
+    throw new Error('Invalid ID')
   }
 
-  let updatedLikedIds = [...(post.likedIds || [])];
+  let updatedLikedIds = [...(post.likedIds || [])]
 
-  updatedLikedIds.push(currentUser.id);
+  updatedLikedIds.push(currentUser.id)
 
   // NOTIFICATION PART START
   try {
@@ -37,15 +38,15 @@ export async function POST(request: Request) {
       where: {
         id: postId,
       },
-    });
+    })
 
     if (post?.userId) {
       await prisma.notification.create({
         data: {
-          body: "Someone liked your interact!",
+          body: 'Someone liked your interact!',
           userId: post.userId,
         },
-      });
+      })
 
       await prisma.user.update({
         where: {
@@ -54,10 +55,10 @@ export async function POST(request: Request) {
         data: {
           hasNotification: true,
         },
-      });
+      })
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 
   const updatedPost = await prisma.post.update({
@@ -67,41 +68,39 @@ export async function POST(request: Request) {
     data: {
       likedIds: updatedLikedIds,
     },
-  });
+  })
 
-  return NextResponse.json(updatedPost);
+  return NextResponse.json(updatedPost)
 }
 
 export async function DELETE(request: Request) {
-  const currentUser = await getCurrentUser();
+  const currentUser = await getCurrentUser()
 
   if (!currentUser) {
-    return NextResponse.error();
+    return NextResponse.error()
   }
 
-  const body = await request.json();
+  const body = await request.json()
 
-  const { postId } = body;
+  const { postId } = body
 
-  if (!postId || typeof postId !== "string") {
-    throw new Error("Invalid ID");
+  if (!postId || typeof postId !== 'string') {
+    throw new Error('Invalid ID')
   }
 
   const post = await prisma.post.findUnique({
     where: {
       id: postId,
     },
-  });
+  })
 
   if (!post) {
-    throw new Error("Invalid ID");
+    throw new Error('Invalid ID')
   }
 
-  let updatedLikedIds = [...(post.likedIds || [])];
+  let updatedLikedIds = [...(post.likedIds || [])]
 
-  updatedLikedIds = updatedLikedIds.filter(
-    (likedId) => likedId !== currentUser?.id
-  );
+  updatedLikedIds = updatedLikedIds.filter((likedId) => likedId !== currentUser?.id)
 
   const updatedPost = await prisma.post.update({
     where: {
@@ -110,7 +109,7 @@ export async function DELETE(request: Request) {
     data: {
       likedIds: updatedLikedIds,
     },
-  });
+  })
 
-  return NextResponse.json(updatedPost);
+  return NextResponse.json(updatedPost)
 }
