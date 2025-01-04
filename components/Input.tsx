@@ -1,23 +1,36 @@
-interface InputProps {
+// eslint-disable-next-line
+import { Path, FieldValues, UseFormRegister } from 'react-hook-form'
+
+interface InputProps<T extends FieldValues> {
   placeholder?: string
-  value?: string
+  label?: string
   type?: string
   disabled?: boolean
-  // eslint-disable-next-line
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-  label?: string
+  required?: boolean
+  id: Path<T>
+  register: UseFormRegister<T>
+  errors?: string
 }
 
-const Input: React.FC<InputProps> = ({ placeholder, value, type = 'text', onChange, disabled, label }) => (
+const Input = <T extends FieldValues>({
+  id,
+  placeholder,
+  type = 'text',
+  disabled,
+  label,
+  required,
+  register,
+  errors,
+}: InputProps<T>) => (
   <div className="w-full">
-    {label && <p className="text-xl text-white font-semibold mb-2">{label}</p>}
+    {label && <p className={`text-xl text-white font-semibold mb-2 ${errors && `text-rose-500`}`}>{label}</p>}
     <input
+      id={id}
+      {...register(id, { required })}
       disabled={disabled}
-      onChange={onChange}
-      value={value}
       placeholder={placeholder}
       type={type}
-      className="
+      className={`
           w-full
           p-4 
           text-lg 
@@ -33,8 +46,10 @@ const Input: React.FC<InputProps> = ({ placeholder, value, type = 'text', onChan
           disabled:bg-neutral-900
           disabled:opacity-70
           disabled:cursor-not-allowed
-        "
+          ${errors && `border-rose-500`} ${errors && `focus:border-rose-500`}
+        `}
     />
+    {errors && <p className="text-red-500 text-sm mt-1">{errors}</p>}
   </div>
 )
 
