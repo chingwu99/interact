@@ -7,9 +7,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 // @ts-ignore
-import { User } from '@prisma/client'
+// import { User } from '@prisma/client'
 
 import useEditModal from '@/hooks/useEditModal'
+import { useAuth } from '@/hooks/useAuth'
 
 import Input from '../Input'
 import Modal from '../Modal'
@@ -17,14 +18,16 @@ import ImageUpload from '../ImageUpload'
 
 import { editSchema, EditFormValues } from './schema'
 
-interface EditModalProps {
-  currentUser: User | null
-}
+// interface EditModalProps {
+//   currentUser: User | null
+// }
 
-const EditModal: React.FC<EditModalProps> = ({ currentUser }) => {
+const EditModal: React.FC = () => {
   const router = useRouter()
   const editModal = useEditModal()
   const [isLoading, setIsLoading] = useState(false)
+
+  const { user: currentUser } = useAuth()
 
   const defaultValues = useMemo(
     () => ({

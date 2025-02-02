@@ -8,8 +8,9 @@ import LoginModal from '@/components/modals/LoginModal'
 import RegisterModal from '@/components/modals/RegisterModal'
 import EditModal from '@/components/modals/EditModal'
 import ToasterProvider from '@/providers/ToasterProvider'
+import AuthGuard from '@/components/AuthGuard'
 
-import getCurrentUser from './actions/getCurrentUser'
+// import getCurrentUser from './actions/getCurrentUser'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,33 +24,39 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const currentUser = await getCurrentUser()
+  // const currentUser = await getCurrentUser()
 
   return (
     <html lang="en">
       <body className={inter.className}>
         <ToasterProvider />
-        <RegisterModal />
-        <LoginModal />
-        <EditModal currentUser={currentUser} />
+        <AuthGuard>
+          <RegisterModal />
+          <LoginModal />
+          <EditModal
+          // currentUser={currentUser}
+          />
 
-        <div className="container h-full mx-auto xl:px-30 max-w-6xl">
-          <div className="grid  grid-cols-4 h-full">
-            <Sidebar currentUser={currentUser} />
+          <div className="container h-full mx-auto xl:px-30 max-w-6xl">
+            <div className="grid  grid-cols-4 h-full">
+              <Sidebar
+              // currentUser={currentUser}
+              />
 
-            <div
-              className="
-              col-span-3 
-              lg:col-span-2 
-              border-x-[1px] 
-              border-neutral-800
-          "
-            >
-              {children}
+              <div
+                className="
+                col-span-3 
+                lg:col-span-2 
+                border-x-[1px] 
+                border-neutral-800
+            "
+              >
+                {children}
+              </div>
+              <FollowBar />
             </div>
-            <FollowBar />
           </div>
-        </div>
+        </AuthGuard>
       </body>
     </html>
   )

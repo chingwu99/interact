@@ -7,6 +7,8 @@ import { BiLogOut } from 'react-icons/bi'
 import { BsHouseFill, BsBellFill } from 'react-icons/bs'
 import { FaUser } from 'react-icons/fa'
 
+import { useAuth } from '@/hooks/useAuth'
+
 import SidebarItem from './SidebarItem'
 import SidebarLogo from './SidebarLogo'
 import SidebarInteractButton from './SidebarInteractButton'
@@ -15,7 +17,9 @@ interface SidebarProps {
   currentUser?: User | null
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
+const Sidebar: React.FC<SidebarProps> = () => {
+  const { user: currentUser } = useAuth()
+
   const items = [
     {
       icon: BsHouseFill,
