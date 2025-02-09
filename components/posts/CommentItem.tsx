@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
 import { formatDistanceToNowStrict } from 'date-fns'
 
-import { UserWithFollowersCount } from '@/types'
+import type { UserWithFollowersCount } from '@/services/user/type'
 
 import Avatar from '../Avatar'
 

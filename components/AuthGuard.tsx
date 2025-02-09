@@ -1,21 +1,16 @@
 'use client'
 
 import { useEffect } from 'react'
-// import { useRouter } from 'next/navigation'
 
 import { useAuth } from '@/hooks/useAuth'
-// import useLoginModal from '@/hooks/useLoginModal'
 
 const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const {
-    // isAuthenticated,
-    isLoading,
+    // isLoading,
     checkAuth,
     user,
     setIsLoading,
   } = useAuth()
-  //   const router = useRouter()
-  //   const loginModal = useLoginModal()
 
   console.log('user', user)
 
@@ -28,19 +23,6 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
       setIsLoading(false)
     }
   }, [checkAuth, setIsLoading])
-
-  //   useEffect(() => {
-  //     if (!isLoading) {
-  //       if (!isAuthenticated) {
-  //         return loginModal.onOpen()
-  //       }
-  //       //   router.push('/')
-  //     }
-  //   }, [isAuthenticated, isLoading, router, loginModal])
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
   return <>{children}</>

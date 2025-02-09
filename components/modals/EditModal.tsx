@@ -5,10 +5,8 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
-// @ts-ignore
-// import { User } from '@prisma/client'
 
+import { userClientService } from '@/services/user/client'
 import useEditModal from '@/hooks/useEditModal'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -18,16 +16,12 @@ import ImageUpload from '../ImageUpload'
 
 import { editSchema, EditFormValues } from './schema'
 
-// interface EditModalProps {
-//   currentUser: User | null
-// }
-
 const EditModal: React.FC = () => {
   const router = useRouter()
   const editModal = useEditModal()
   const [isLoading, setIsLoading] = useState(false)
 
-  const { user: currentUser } = useAuth()
+  const { user: currentUser, checkAuth } = useAuth()
 
   const defaultValues = useMemo(
     () => ({
@@ -66,8 +60,9 @@ const EditModal: React.FC = () => {
     try {
       setIsLoading(true)
 
-      await axios.patch('/api/edit', data)
+      await userClientService.updateUser(data)
 
+      checkAuth()
       router.refresh()
       toast.success('Updated')
       editModal.onClose()

@@ -3,25 +3,25 @@
 import { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { format } from 'date-fns'
-import axios from 'axios'
 import { toast } from 'react-hot-toast'
 import { BiCalendar } from 'react-icons/bi'
-// @ts-ignore
-import { User } from '@prisma/client'
 
+import { followClientService } from '@/services/follow/client'
 import useLoginModal from '@/hooks/useLoginModal'
 import useEditModal from '@/hooks/useEditModal'
-import { UserWithFollowersCount } from '@/types'
+import type { UserWithFollowersCount } from '@/services/user/type'
+import { useAuth } from '@/hooks/useAuth'
 
 import Button from '../Button'
 
 interface UserBioProps {
   avatarUser: UserWithFollowersCount | null
   userId: string
-  currentUser: User | null
 }
 
-const UserBio: React.FC<UserBioProps> = ({ userId, avatarUser, currentUser }) => {
+const UserBio: React.FC<UserBioProps> = ({ userId, avatarUser }) => {
+  const { user: currentUser, checkAuth } = useAuth()
+
   const router = useRouter()
   const editModal = useEditModal()
   const loginModal = useLoginModal()
@@ -49,12 +49,13 @@ const UserBio: React.FC<UserBioProps> = ({ userId, avatarUser, currentUser }) =>
       let request
 
       if (isFollowing) {
-        request = () => axios.delete('/api/follow', { data: { userId } })
+        request = () => followClientService.unfollowUser({ userId })
       } else {
-        request = () => axios.post('/api/follow', { userId })
+        request = () => followClientService.followUser({ userId })
       }
 
       await request()
+      await checkAuth()
 
       router.refresh()
 
@@ -62,7 +63,7 @@ const UserBio: React.FC<UserBioProps> = ({ userId, avatarUser, currentUser }) =>
     } catch (error) {
       toast.error('Something went wrong')
     }
-  }, [currentUser, isFollowing, userId, router, loginModal])
+  }, [currentUser, isFollowing, userId, router, loginModal, checkAuth])
 
   return (
     <div className="border-b-[1px] border-neutral-800 pb-4">

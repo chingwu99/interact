@@ -1,4 +1,4 @@
-import getUserById from '@/app/actions/getUserById'
+import { userServerService } from '@/services/user/server'
 
 import CommentItem from './CommentItem'
 
@@ -7,7 +7,7 @@ interface CommentItemWrapperProps {
 }
 
 const CommentItemWrapper: React.FC<CommentItemWrapperProps> = async ({ comment }) => {
-  const avatarUser = await getUserById({ userId: comment.user.id })
+  const avatarUser = await userServerService.getUser(comment.user.id)
   return <CommentItem data={comment} avatarUser={avatarUser} />
 }
 

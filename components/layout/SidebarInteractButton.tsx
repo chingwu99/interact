@@ -3,9 +3,8 @@
 import { useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { FaFeatherAlt } from 'react-icons/fa'
-// @ts-ignore
-import { User } from '@prisma/client'
 
+import type { User } from '@/services/user/type'
 import useLoginModal from '@/hooks/useLoginModal'
 
 interface SidebarInteractButtonProps {

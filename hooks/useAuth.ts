@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { toast } from 'react-hot-toast'
 
-import { authService, LoginCredentials, RegisterCredentials } from '@/services/auth'
+import { authClientService } from '@/services/auth/client'
+import type { LoginCredentials, RegisterCredentials } from '@/services/auth/type'
 
 interface AuthStore {
   user: any | null
@@ -24,7 +25,7 @@ export const useAuth = create<AuthStore>((set) => ({
 
   login: async (credentials) => {
     try {
-      const user = await authService.login(credentials)
+      const user = await authClientService.login(credentials)
       set({ user, isAuthenticated: true })
       toast.success('Logged in successfully')
     } catch (error: any) {
@@ -35,7 +36,7 @@ export const useAuth = create<AuthStore>((set) => ({
 
   register: async (credentials) => {
     try {
-      const user = await authService.register(credentials)
+      const user = await authClientService.register(credentials)
       set({ user, isAuthenticated: true })
       toast.success('Registered successfully')
     } catch (error: any) {
@@ -46,7 +47,7 @@ export const useAuth = create<AuthStore>((set) => ({
 
   logout: async () => {
     try {
-      await authService.logout()
+      await authClientService.logout()
       set({ user: null, isAuthenticated: false })
       toast.success('Logged out successfully')
     } catch (error: any) {
@@ -58,7 +59,7 @@ export const useAuth = create<AuthStore>((set) => ({
   checkAuth: async () => {
     try {
       set({ isLoading: true })
-      const user = await authService.getCurrentUser()
+      const user = await authClientService.getCurrentUser()
       set({
         user,
         isAuthenticated: !!user,

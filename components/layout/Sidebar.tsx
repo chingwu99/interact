@@ -1,12 +1,10 @@
 'use client'
 
-import { signOut } from 'next-auth/react'
-// @ts-ignore
-import { User } from '@prisma/client'
 import { BiLogOut } from 'react-icons/bi'
 import { BsHouseFill, BsBellFill } from 'react-icons/bs'
 import { FaUser } from 'react-icons/fa'
 
+import type { User } from '@/services/user/type'
 import { useAuth } from '@/hooks/useAuth'
 
 import SidebarItem from './SidebarItem'
@@ -18,7 +16,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = () => {
-  const { user: currentUser } = useAuth()
+  const { user: currentUser, logout } = useAuth()
 
   const items = [
     {
@@ -59,7 +57,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
           ))}
 
           {currentUser && (
-            <SidebarItem onClick={() => signOut()} icon={BiLogOut} label="Logout" currentUser={currentUser} />
+            <SidebarItem onClick={() => logout()} icon={BiLogOut} label="Logout" currentUser={currentUser} />
           )}
           <SidebarInteractButton currentUser={currentUser} />
         </div>

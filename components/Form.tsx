@@ -6,15 +6,14 @@ import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import axios from 'axios'
 import { toast } from 'react-hot-toast'
-// @ts-ignore
-import { User } from '@prisma/client'
 
-import { UserWithFollowersCount } from '@/types'
 // import custom hook
 import useLoginModal from '@/hooks/useLoginModal'
 import useRegisterModal from '@/hooks/useRegisterModal'
+import { useAuth } from '@/hooks/useAuth'
+import { postClientService } from '@/services/post/client'
+import { commentClientService } from '@/services/comment/client'
 
 import Avatar from './Avatar'
 import Button from './Button'
@@ -24,8 +23,6 @@ interface FormProps {
   placeholder: string
   isComment?: boolean
   postId?: string
-  currentUser: User | null
-  avatarUser: UserWithFollowersCount | null
 }
 
 const formSchema = z.object({
@@ -34,10 +31,12 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
-const Form: React.FC<FormProps> = ({ placeholder, isComment, postId, currentUser, avatarUser }) => {
+const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const router = useRouter()
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
+
+  const { user: currentUser } = useAuth()
 
   const {
     register,
@@ -56,8 +55,15 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId, currentUser
   const onSubmit = async (values: FormValues) => {
     try {
       setIsLoading(true)
-      const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts'
-      await axios.post(url, values)
+
+      if (isComment && postId) {
+        await commentClientService.createComment({
+          body: values.body,
+          postId,
+        })
+      } else {
+        await postClientService.createPost(values)
+      }
 
       toast.success('Interact created')
       reset()
@@ -74,7 +80,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId, currentUser
       {currentUser ? (
         <div className="flex flex-row gap-4">
           <div>
-            <Avatar userId={currentUser?.id} avatarUser={avatarUser} />
+            <Avatar userId={currentUser?.id} avatarUser={currentUser} />
           </div>
 
           <div className="w-full">

@@ -10,8 +10,6 @@ import EditModal from '@/components/modals/EditModal'
 import ToasterProvider from '@/providers/ToasterProvider'
 import AuthGuard from '@/components/AuthGuard'
 
-// import getCurrentUser from './actions/getCurrentUser'
-
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -24,24 +22,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // const currentUser = await getCurrentUser()
-
   return (
     <html lang="en">
       <body className={inter.className}>
         <ToasterProvider />
+        <RegisterModal />
+        <LoginModal />
+
         <AuthGuard>
-          <RegisterModal />
-          <LoginModal />
-          <EditModal
-          // currentUser={currentUser}
-          />
+          <EditModal />
 
           <div className="container h-full mx-auto xl:px-30 max-w-6xl">
             <div className="grid  grid-cols-4 h-full">
-              <Sidebar
-              // currentUser={currentUser}
-              />
+              <Sidebar />
 
               <div
                 className="

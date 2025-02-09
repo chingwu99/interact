@@ -1,4 +1,4 @@
-import getUserById from '@/app/actions/getUserById'
+import { userServerService } from '@/services/user/server'
 
 import Avatar from '../Avatar'
 
@@ -7,7 +7,7 @@ interface FollowBarItemProps {
 }
 
 const FollowBarItem: React.FC<FollowBarItemProps> = async ({ user }) => {
-  const avatarUser = await getUserById({ userId: user.id })
+  const avatarUser = await userServerService.getUser(user.id)
 
   return (
     <div key={user.id} className="flex flex-row gap-4">

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import Image from 'next/image'
 
-import { UserWithFollowersCount } from '@/types'
+import type { UserWithFollowersCount } from '@/services/user/type'
 
 interface AvatarProps {
   userId: string
@@ -38,6 +38,8 @@ const Avatar: React.FC<AvatarProps> = ({ userId, isLarge, hasBorder, avatarUser 
         transition 
         cursor-pointer
         relative
+        min-w-12
+        min-h-12
       `}
     >
       <Image

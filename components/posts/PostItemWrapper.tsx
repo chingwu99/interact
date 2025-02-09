@@ -1,5 +1,4 @@
-import getCurrentUser from '@/app/actions/getCurrentUser'
-import getUserById from '@/app/actions/getUserById'
+import { userServerService } from '@/services/user/server'
 
 import PostItem from './PostItem'
 
@@ -8,11 +7,8 @@ interface PostItemWrapperProps {
 }
 
 const PostItemWrapper: React.FC<PostItemWrapperProps> = async ({ post }) => {
-  const currentUser = await getCurrentUser()
-  const avatarUser = await getUserById({ userId: post.user.id })
-  return (
-    <PostItem postId={post.id as string} key={post.id} data={post} currentUser={currentUser} avatarUser={avatarUser} />
-  )
+  const avatarUser = await userServerService.getUser(post.user.id)
+  return <PostItem postId={post.id as string} key={post.id} data={post} avatarUser={avatarUser} />
 }
 
 export default PostItemWrapper

@@ -1,21 +1,8 @@
-import api from './api'
+import api from '../clientApi'
 
-export interface LoginCredentials {
-  email: string
-  password: string
-}
+import type { LoginCredentials, RegisterCredentials, AuthResponse } from './type'
 
-export interface RegisterCredentials extends LoginCredentials {
-  name: string
-  username: string
-}
-
-export interface AuthResponse {
-  token: string
-  user: any
-}
-
-export const authService = {
+export const authClientService = {
   login: async (credentials: LoginCredentials) => {
     const response = await api.post<AuthResponse>('/auth/login', credentials)
     localStorage.setItem('token', response.data.token)

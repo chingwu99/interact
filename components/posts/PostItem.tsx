@@ -4,29 +4,29 @@ import { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import { formatDistanceToNowStrict } from 'date-fns'
-import axios from 'axios'
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from 'react-icons/ai'
 
 import useLoginModal from '@/hooks/useLoginModal'
-
-// eslint-disable-next-line import/order
-import { User } from '@prisma/client'
-import { UserWithFollowersCount } from '@/types'
+import { useAuth } from '@/hooks/useAuth'
+import { likeClientService } from '@/services/like/client'
+import type { UserWithFollowersCount } from '@/services/user/type'
 
 import Avatar from '../Avatar'
 
 interface PostItemProps {
   data: Record<string, any>
   postId: string
-  currentUser: User | null
-  avatarUser: UserWithFollowersCount | null
+  avatarUser: UserWithFollowersCount
 }
 
-const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser, currentUser }) => {
+const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser }) => {
+  const { user: currentUser } = useAuth()
+
   const router = useRouter()
   const loginModal = useLoginModal()
 
   const hasLiked = useMemo(() => {
+    if (!currentUser) return false
     const list = data?.likedIds || []
 
     return list.includes(currentUser?.id)
@@ -41,9 +41,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser, curr
       let request
 
       if (hasLiked) {
-        request = () => axios.delete('/api/like', { data: { postId } })
+        request = () => likeClientService.unlikePost({ postId })
       } else {
-        request = () => axios.post('/api/like', { postId })
+        request = () => likeClientService.likePost({ postId })
       }
 
       await request()
@@ -132,7 +132,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser, curr
             </span>
             <span className="text-neutral-500 text-sm">{createdAt}</span>
           </div>
-          <div className="text-white mt-1">{data.body}</div>
+          <div className="text-white mt-1 break-all whitespace-pre-wrap">{data.body}</div>
           <div className="flex flex-row items-center mt-3 gap-10">
             <div
               className="

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import { UserWithFollowersCount } from '@/types'
+import type { UserWithFollowersCount } from '@/services/user/type'
 
 import Avatar from '../Avatar'
 
