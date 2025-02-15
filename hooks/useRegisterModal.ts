@@ -2,13 +2,18 @@ import { create } from 'zustand'
 
 interface RegisterModalStore {
   isOpen: boolean
-  onOpen: () => void
+  // eslint-disable-next-line
+  onOpen: (isInitialized: boolean) => void
   onClose: () => void
 }
 
 const useRegisterModal = create<RegisterModalStore>((set) => ({
   isOpen: false,
-  onOpen: () => set({ isOpen: true }),
+  onOpen: (isInitialized: boolean) => {
+    if (isInitialized) {
+      set({ isOpen: true })
+    }
+  },
   onClose: () => set({ isOpen: false }),
 }))
 

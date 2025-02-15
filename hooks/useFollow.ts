@@ -14,9 +14,10 @@ interface UseFollowProps {
 export const useFollow = ({ userId, initialFollowingIds }: UseFollowProps) => {
   const router = useRouter()
   const loginModal = useLoginModal()
-  const { checkAuth, user: currentUser } = useAuth()
+  const { checkAuth, user: currentUser, isInitialized } = useAuth()
 
   const [isFollowing, setIsFollowing] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     setIsFollowing(initialFollowingIds?.includes(userId))
@@ -24,28 +25,29 @@ export const useFollow = ({ userId, initialFollowingIds }: UseFollowProps) => {
 
   const toggleFollow = useCallback(async () => {
     if (!currentUser) {
-      return loginModal.onOpen()
+      return loginModal.onOpen(isInitialized)
     }
 
     try {
+      setIsLoading(true)
       const request = isFollowing
         ? () => followClientService.unfollowUser({ userId })
         : () => followClientService.followUser({ userId })
 
-      // 執行請求
       await request()
-
-      // 請求成功後才更新狀態
       setIsFollowing((prev) => !prev)
       await checkAuth()
       router.refresh()
     } catch (error) {
       toast.error('Something went wrong')
+    } finally {
+      setIsLoading(false)
     }
-  }, [userId, isFollowing, loginModal, router, checkAuth, currentUser])
+  }, [userId, isFollowing, loginModal, router, checkAuth, currentUser, isInitialized])
 
   return {
     isFollowing,
     toggleFollow,
+    isLoading,
   }
 }

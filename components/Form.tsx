@@ -37,7 +37,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
 
-  const { user: currentUser, isLoading: isAuthLoading } = useAuth()
+  const { user: currentUser, isLoading: isAuthLoading, isInitialized } = useAuth()
 
   const {
     register,
@@ -133,8 +133,8 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
           <Image alt="Logo" src="/officialLogo.png" quality={100} height="71" width="340" />
           <h1 className="text-white text-xl text-center mb-4 font-bold my-8">Welcome to Interact</h1>
           <div className="flex flex-row items-center justify-center gap-4">
-            <Button label="Login" onClick={loginModal.onOpen} />
-            <Button label="Register" onClick={registerModal.onOpen} secondary />
+            <Button label="Login" onClick={() => loginModal.onOpen(isInitialized)} />
+            <Button label="Register" onClick={() => registerModal.onOpen(isInitialized)} secondary />
           </div>
         </div>
       )}

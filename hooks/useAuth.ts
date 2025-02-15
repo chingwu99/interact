@@ -8,6 +8,7 @@ interface AuthStore {
   user: any | null
   isLoading: boolean
   isAuthenticated: boolean
+  isInitialized: boolean
   // eslint-disable-next-line
   login: (credentials: LoginCredentials) => Promise<void>
   // eslint-disable-next-line
@@ -22,6 +23,7 @@ export const useAuth = create<AuthStore>((set) => ({
   user: null,
   isLoading: true,
   isAuthenticated: false,
+  isInitialized: false,
 
   login: async (credentials) => {
     try {
@@ -57,19 +59,30 @@ export const useAuth = create<AuthStore>((set) => ({
   },
 
   checkAuth: async () => {
+    if (!localStorage.getItem('token')) {
+      set({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        isInitialized: true,
+      })
+      return
+    }
+
     try {
-      set({ isLoading: true })
       const user = await authClientService.getCurrentUser()
       set({
         user,
         isAuthenticated: !!user,
         isLoading: false,
+        isInitialized: true,
       })
     } catch (error) {
       set({
         user: null,
         isAuthenticated: false,
         isLoading: false,
+        isInitialized: true,
       })
     }
   },

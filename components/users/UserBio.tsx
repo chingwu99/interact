@@ -10,17 +10,18 @@ import { useAuth } from '@/hooks/useAuth'
 import { useFollow } from '@/hooks/useFollow'
 
 import Button from '../Button'
+import LoaderMini from '../LoaderMini'
 
 interface UserBioProps {
   avatarUser: UserWithFollowersCount | null
 }
 
 const UserBio: React.FC<UserBioProps> = ({ avatarUser }) => {
-  const { user: currentUser } = useAuth()
+  const { user: currentUser, isInitialized } = useAuth()
 
   const editModal = useEditModal()
 
-  const { isFollowing, toggleFollow } = useFollow({
+  const { isFollowing, toggleFollow, isLoading } = useFollow({
     userId: avatarUser?.id as string,
     initialFollowingIds: currentUser?.followingIds || [],
   })
@@ -36,7 +37,9 @@ const UserBio: React.FC<UserBioProps> = ({ avatarUser }) => {
   return (
     <div className="border-b-[1px] border-neutral-800 pb-4">
       <div className="flex justify-end p-2">
-        {currentUser?.id === avatarUser?.id ? (
+        {!isInitialized ? (
+          <LoaderMini />
+        ) : currentUser?.id === avatarUser?.id ? (
           <Button secondary label="Edit" onClick={editModal.onOpen} />
         ) : (
           <Button
@@ -44,6 +47,8 @@ const UserBio: React.FC<UserBioProps> = ({ avatarUser }) => {
             label={isFollowing ? 'Unfollow' : 'Follow'}
             secondary={!isFollowing}
             outline={isFollowing}
+            disabled={isLoading}
+            isLoading={isLoading}
           />
         )}
       </div>

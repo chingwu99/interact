@@ -2,6 +2,6 @@
 
 import { ClipLoader } from 'react-spinners'
 
-const LoaderMini = () => <ClipLoader color="#fff" size={20} />
+const LoaderMini = () => <ClipLoader color="#795548" size={20} />
 
 export default LoaderMini

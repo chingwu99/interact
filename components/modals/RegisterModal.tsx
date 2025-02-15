@@ -15,7 +15,7 @@ import Modal from '../Modal'
 import { registerSchema, RegisterFormValues } from './schema'
 
 const RegisterModal = () => {
-  const { register: registerUser } = useAuth()
+  const { register: registerUser, isInitialized } = useAuth()
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
   const [isLoading, setIsLoading] = useState(false)
@@ -59,8 +59,8 @@ const RegisterModal = () => {
   const onToggle = useCallback(() => {
     registerModal.onClose()
     reset()
-    loginModal.onOpen()
-  }, [loginModal, registerModal, reset])
+    loginModal.onOpen(isInitialized)
+  }, [loginModal, registerModal, reset, isInitialized])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">

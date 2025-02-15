@@ -6,6 +6,7 @@ import { FaFeatherAlt } from 'react-icons/fa'
 
 import type { User } from '@/services/user/type'
 import useLoginModal from '@/hooks/useLoginModal'
+import { useAuth } from '@/hooks/useAuth'
 
 interface SidebarInteractButtonProps {
   currentUser?: User | null
@@ -14,14 +15,15 @@ interface SidebarInteractButtonProps {
 const SidebarInteractButton: React.FC<SidebarInteractButtonProps> = ({ currentUser }) => {
   const router = useRouter()
   const loginModal = useLoginModal()
+  const { isInitialized } = useAuth()
 
   const onClick = useCallback(() => {
     if (!currentUser) {
-      return loginModal.onOpen()
+      return loginModal.onOpen(isInitialized)
     }
 
     router.push('/')
-  }, [loginModal, router, currentUser])
+  }, [loginModal, router, currentUser, isInitialized])
 
   return (
     <div onClick={onClick} className="    pl-2 lg:pl-0">

@@ -16,7 +16,7 @@ import { loginSchema, LoginFormValues } from './schema'
 
 const LoginModal = () => {
   const router = useRouter()
-  const { login } = useAuth()
+  const { login, isInitialized } = useAuth()
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
   const [isLoading, setIsLoading] = useState(false)
@@ -54,8 +54,8 @@ const LoginModal = () => {
   const onToggle = useCallback(() => {
     loginModal.onClose()
     reset()
-    registerModal.onOpen()
-  }, [loginModal, registerModal, reset])
+    registerModal.onOpen(isInitialized)
+  }, [loginModal, registerModal, reset, isInitialized])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">

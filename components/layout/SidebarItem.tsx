@@ -7,6 +7,7 @@ import { BsDot } from 'react-icons/bs'
 
 import useLoginModal from '@/hooks/useLoginModal'
 import type { User } from '@/services/user/type'
+import { useAuth } from '@/hooks/useAuth'
 
 interface SidebarItemProps {
   label: string
@@ -21,18 +22,23 @@ interface SidebarItemProps {
 const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon: Icon, href, auth, onClick, alert, currentUser }) => {
   const router = useRouter()
   const loginModal = useLoginModal()
+  const { isInitialized } = useAuth()
 
   const handleClick = useCallback(() => {
+    if (!isInitialized) {
+      return
+    }
+
     if (onClick) {
       return onClick()
     }
 
     if (auth && !currentUser) {
-      loginModal.onOpen()
+      loginModal.onOpen(isInitialized)
     } else if (href) {
       router.push(href)
     }
-  }, [router, href, auth, loginModal, onClick, currentUser])
+  }, [router, href, auth, loginModal, onClick, currentUser, isInitialized])
 
   return (
     <div onClick={handleClick} className="flex flex-row pl-2 lg:pl-0 items-center">

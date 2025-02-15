@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 
 import useLoginModal from '@/hooks/useLoginModal'
 import { likeClientService } from '@/services/like/client'
+import { useAuth } from '@/hooks/useAuth'
 
 interface UsePostLikeProps {
   postId: string
@@ -14,7 +15,7 @@ interface UsePostLikeProps {
 export const usePostLike = ({ postId, userId, initialLikedIds }: UsePostLikeProps) => {
   const router = useRouter()
   const loginModal = useLoginModal()
-
+  const { isInitialized } = useAuth()
   // 使用 useEffect 來更新狀態，確保與 props 同步
   const [isLiked, setIsLiked] = useState(false)
   const [likesCount, setLikesCount] = useState(0)
@@ -29,7 +30,7 @@ export const usePostLike = ({ postId, userId, initialLikedIds }: UsePostLikeProp
       event?.stopPropagation()
 
       if (!userId) {
-        return loginModal.onOpen()
+        return loginModal.onOpen(isInitialized)
       }
 
       try {
@@ -49,7 +50,7 @@ export const usePostLike = ({ postId, userId, initialLikedIds }: UsePostLikeProp
         toast.error('Something went wrong')
       }
     },
-    [postId, userId, isLiked, loginModal, router]
+    [postId, userId, isLiked, loginModal, router, isInitialized]
   )
 
   return {
