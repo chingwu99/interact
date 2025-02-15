@@ -1,16 +1,13 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
+import { useMemo } from 'react'
 import { format } from 'date-fns'
-import { toast } from 'react-hot-toast'
 import { BiCalendar } from 'react-icons/bi'
 
-import { followClientService } from '@/services/follow/client'
-import useLoginModal from '@/hooks/useLoginModal'
 import useEditModal from '@/hooks/useEditModal'
 import type { UserWithFollowersCount } from '@/services/user/type'
 import { useAuth } from '@/hooks/useAuth'
+import { useFollow } from '@/hooks/useFollow'
 
 import Button from '../Button'
 
@@ -20,11 +17,14 @@ interface UserBioProps {
 }
 
 const UserBio: React.FC<UserBioProps> = ({ userId, avatarUser }) => {
-  const { user: currentUser, checkAuth } = useAuth()
+  const { user: currentUser } = useAuth()
 
-  const router = useRouter()
   const editModal = useEditModal()
-  const loginModal = useLoginModal()
+
+  const { isFollowing, toggleFollow } = useFollow({
+    userId,
+    initialFollowingIds: currentUser?.followingIds || [],
+  })
 
   const createdAt = useMemo(() => {
     if (!avatarUser?.createdAt) {
@@ -33,37 +33,6 @@ const UserBio: React.FC<UserBioProps> = ({ userId, avatarUser }) => {
 
     return format(new Date(avatarUser.createdAt), 'MMMM yyyy')
   }, [avatarUser?.createdAt])
-
-  const isFollowing = useMemo(() => {
-    const list = currentUser?.followingIds || []
-
-    return list.includes(userId)
-  }, [currentUser, userId])
-
-  const toggleFollow = useCallback(async () => {
-    if (!currentUser) {
-      return loginModal.onOpen()
-    }
-
-    try {
-      let request
-
-      if (isFollowing) {
-        request = () => followClientService.unfollowUser({ userId })
-      } else {
-        request = () => followClientService.followUser({ userId })
-      }
-
-      await request()
-      await checkAuth()
-
-      router.refresh()
-
-      toast.success('Success')
-    } catch (error) {
-      toast.error('Something went wrong')
-    }
-  }, [currentUser, isFollowing, userId, router, loginModal, checkAuth])
 
   return (
     <div className="border-b-[1px] border-neutral-800 pb-4">
