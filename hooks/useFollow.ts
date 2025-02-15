@@ -14,7 +14,7 @@ interface UseFollowProps {
 export const useFollow = ({ userId, initialFollowingIds }: UseFollowProps) => {
   const router = useRouter()
   const loginModal = useLoginModal()
-  const { checkAuth } = useAuth()
+  const { checkAuth, user: currentUser } = useAuth()
 
   const [isFollowing, setIsFollowing] = useState(false)
 
@@ -23,7 +23,7 @@ export const useFollow = ({ userId, initialFollowingIds }: UseFollowProps) => {
   }, [userId, initialFollowingIds])
 
   const toggleFollow = useCallback(async () => {
-    if (!userId) {
+    if (!currentUser) {
       return loginModal.onOpen()
     }
 
@@ -42,7 +42,7 @@ export const useFollow = ({ userId, initialFollowingIds }: UseFollowProps) => {
     } catch (error) {
       toast.error('Something went wrong')
     }
-  }, [userId, isFollowing, loginModal, router, checkAuth])
+  }, [userId, isFollowing, loginModal, router, checkAuth, currentUser])
 
   return {
     isFollowing,

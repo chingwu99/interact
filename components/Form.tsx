@@ -7,8 +7,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { toast } from 'react-hot-toast'
-
 // import custom hook
+import { ClipLoader } from 'react-spinners'
+
 import useLoginModal from '@/hooks/useLoginModal'
 import useRegisterModal from '@/hooks/useRegisterModal'
 import { useAuth } from '@/hooks/useAuth'
@@ -18,7 +19,6 @@ import { commentClientService } from '@/services/comment/client'
 import Avatar from './Avatar'
 import Button from './Button'
 import SubmitButton from './SubmitButton'
-import Loader from './Loader'
 
 interface FormProps {
   placeholder: string
@@ -77,7 +77,11 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   }
 
   if (isAuthLoading) {
-    return <Loader />
+    return (
+      <div className="h-[34vh] flex flex-col justify-center items-center ">
+        <ClipLoader color="#906B7F" size={80} />
+      </div>
+    )
   }
 
   return (
