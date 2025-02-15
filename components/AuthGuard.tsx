@@ -7,12 +7,10 @@ import { useAuth } from '@/hooks/useAuth'
 const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const {
     // isLoading,
+    // user,
     checkAuth,
-    user,
     setIsLoading,
   } = useAuth()
-
-  console.log('user', user)
 
   useEffect(() => {
     // Check if token exists and validate it

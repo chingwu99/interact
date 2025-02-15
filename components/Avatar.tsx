@@ -4,27 +4,26 @@ import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import Image from 'next/image'
 
-import type { UserWithFollowersCount } from '@/services/user/type'
+import type { UserWithFollowersCount, User } from '@/services/user/type'
 
 interface AvatarProps {
-  userId: string
   isLarge?: boolean
   hasBorder?: boolean
-  avatarUser: UserWithFollowersCount | null
+  avatarUser: UserWithFollowersCount | User | null
 }
 
-const Avatar: React.FC<AvatarProps> = ({ userId, isLarge, hasBorder, avatarUser }) => {
+const Avatar: React.FC<AvatarProps> = ({ isLarge, hasBorder, avatarUser }) => {
   const router = useRouter()
 
   const onClick = useCallback(
     (event: any) => {
       event.stopPropagation()
 
-      const url = `/users/${userId}`
+      const url = `/users/${avatarUser?.id}`
 
       router.push(url)
     },
-    [router, userId]
+    [router, avatarUser?.id]
   )
 
   return (

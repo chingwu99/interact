@@ -13,16 +13,15 @@ import Button from '../Button'
 
 interface UserBioProps {
   avatarUser: UserWithFollowersCount | null
-  userId: string
 }
 
-const UserBio: React.FC<UserBioProps> = ({ userId, avatarUser }) => {
+const UserBio: React.FC<UserBioProps> = ({ avatarUser }) => {
   const { user: currentUser } = useAuth()
 
   const editModal = useEditModal()
 
   const { isFollowing, toggleFollow } = useFollow({
-    userId,
+    userId: avatarUser?.id as string,
     initialFollowingIds: currentUser?.followingIds || [],
   })
 
@@ -37,7 +36,7 @@ const UserBio: React.FC<UserBioProps> = ({ userId, avatarUser }) => {
   return (
     <div className="border-b-[1px] border-neutral-800 pb-4">
       <div className="flex justify-end p-2">
-        {currentUser?.id === userId ? (
+        {currentUser?.id === avatarUser?.id ? (
           <Button secondary label="Edit" onClick={editModal.onOpen} />
         ) : (
           <Button

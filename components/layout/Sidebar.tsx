@@ -3,6 +3,7 @@
 import { BiLogOut } from 'react-icons/bi'
 import { BsHouseFill, BsBellFill } from 'react-icons/bs'
 import { FaUser } from 'react-icons/fa'
+import { useRouter } from 'next/navigation'
 
 import type { User } from '@/services/user/type'
 import { useAuth } from '@/hooks/useAuth'
@@ -17,7 +18,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = () => {
   const { user: currentUser, logout } = useAuth()
-
+  const router = useRouter()
   const items = [
     {
       icon: BsHouseFill,
@@ -39,6 +40,11 @@ const Sidebar: React.FC<SidebarProps> = () => {
     },
   ]
 
+  const handleLogout = () => {
+    logout()
+    router.push('/')
+  }
+
   return (
     <div className="col-span-1 h-full  md:pr-6 ">
       <div className="flex flex-col">
@@ -57,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
           ))}
 
           {currentUser && (
-            <SidebarItem onClick={() => logout()} icon={BiLogOut} label="Logout" currentUser={currentUser} />
+            <SidebarItem onClick={handleLogout} icon={BiLogOut} label="Logout" currentUser={currentUser} />
           )}
           <SidebarInteractButton currentUser={currentUser} />
         </div>

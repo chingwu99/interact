@@ -1,12 +1,11 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { formatDistanceToNowStrict } from 'date-fns'
 
 import { useAuth } from '@/hooks/useAuth'
-import type { UserWithFollowersCount } from '@/services/user/type'
 import { usePostLike } from '@/hooks/usePostLike'
+import { useTimeAgo } from '@/hooks/useTimeAgo'
 
 import Avatar from '../Avatar'
 
@@ -14,17 +13,16 @@ import PostActions from './PostActions'
 
 interface PostItemProps {
   data: Record<string, any>
-  postId: string
-  avatarUser: UserWithFollowersCount
 }
 
-const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser }) => {
-  const { user: currentUser } = useAuth()
-
+const PostItem: React.FC<PostItemProps> = ({ data = {} }) => {
   const router = useRouter()
 
+  const { user: currentUser } = useAuth()
+  const timeAgo = useTimeAgo(data.createdAt)
+
   const { isLiked, toggleLike, likesCount } = usePostLike({
-    postId,
+    postId: data.id as string,
     userId: currentUser?.id,
     initialLikedIds: data.likedIds || [],
   })
@@ -41,14 +39,6 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser }) =>
     router.push(`/posts/${data.id}`)
   }, [router, data.id])
 
-  const createdAt = useMemo(() => {
-    if (!data?.createdAt) {
-      return null
-    }
-
-    return formatDistanceToNowStrict(new Date(data.createdAt))
-  }, [data.createdAt])
-
   return (
     <div
       onClick={goToPost}
@@ -62,7 +52,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser }) =>
       "
     >
       <div className="flex flex-row items-start gap-3">
-        <Avatar userId={data.user.id} avatarUser={avatarUser} />
+        <Avatar avatarUser={data.user} />
         <div>
           <div className="flex flex-row items-center gap-2">
             <p
@@ -88,7 +78,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser }) =>
             >
               @{data.user.username}
             </span>
-            <span className="text-neutral-500 text-sm">{createdAt}</span>
+            <span className="text-neutral-500 text-sm">{timeAgo}</span>
           </div>
           <div className="text-white mt-1 break-all whitespace-pre-wrap">{data.body}</div>
           <PostActions

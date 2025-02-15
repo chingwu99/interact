@@ -1,4 +1,4 @@
-import CommentItemWrapper from './CommentItemWrapper'
+import CommentItem from './CommentItem'
 
 interface CommentFeedProps {
   comments?: Record<string, any>[]
@@ -7,7 +7,7 @@ interface CommentFeedProps {
 const CommentFeed: React.FC<CommentFeedProps> = ({ comments = [] }) => (
   <>
     {comments.map((comment: Record<string, any>) => (
-      <CommentItemWrapper key={comment.id} comment={comment} />
+      <CommentItem key={comment.id} data={comment} />
     ))}
   </>
 )

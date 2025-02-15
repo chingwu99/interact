@@ -18,6 +18,7 @@ import { commentClientService } from '@/services/comment/client'
 import Avatar from './Avatar'
 import Button from './Button'
 import SubmitButton from './SubmitButton'
+import Loader from './Loader'
 
 interface FormProps {
   placeholder: string
@@ -36,7 +37,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
 
-  const { user: currentUser } = useAuth()
+  const { user: currentUser, isLoading: isAuthLoading } = useAuth()
 
   const {
     register,
@@ -75,12 +76,16 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
     }
   }
 
+  if (isAuthLoading) {
+    return <Loader />
+  }
+
   return (
     <div className="border-b-[1px] border-neutral-800 px-5 py-2">
       {currentUser ? (
         <div className="flex flex-row gap-4">
           <div>
-            <Avatar userId={currentUser?.id} avatarUser={currentUser} />
+            <Avatar avatarUser={currentUser} />
           </div>
 
           <div className="w-full">
@@ -114,7 +119,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
                 transition"
               />
               <div className="mt-4 flex flex-row justify-end">
-                <SubmitButton disabled={isLoading || !isValid} type="submit" label="Interact" />
+                <SubmitButton disabled={isLoading || !isValid} type="submit" label="Interact" isLoading={isLoading} />
               </div>
             </form>
           </div>

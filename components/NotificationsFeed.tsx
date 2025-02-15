@@ -7,9 +7,17 @@ import { useAuth } from '@/hooks/useAuth'
 import { userClientService } from '@/services/user/client'
 import type { Notification } from '@/services/user/type'
 
+import Loader from './Loader'
+
 const NotificationsFeed: React.FC = () => {
-  const { user: currentUser } = useAuth()
+  const { user: currentUser, checkAuth } = useAuth()
   const [fetchedNotifications, setFetchedNotifications] = useState<Notification[]>([])
+
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    checkAuth()
+  }, [checkAuth])
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -21,10 +29,16 @@ const NotificationsFeed: React.FC = () => {
           console.error('Failed to fetch notifications:', error)
         }
       }
+
+      setIsLoading(false)
     }
 
     fetchNotifications()
   }, [currentUser])
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   if (fetchedNotifications.length === 0) {
     return <div className="text-neutral-600 text-center p-6 text-xl">No notifications</div>

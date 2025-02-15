@@ -1,3 +1,4 @@
+import type { User, UserWithFollowersCount } from '@/services/user/type'
 import { userServerService } from '@/services/user/server'
 
 import FollowBarItem from './FollowBarItem'
@@ -14,7 +15,7 @@ const FollowBar = async () => {
       <div className="bg-neutral-800 rounded-xl p-4">
         <h2 className="text-white text-xl font-semibold">Who to follow</h2>
         <div className="flex flex-col gap-6 mt-4">
-          {users.map((user: Record<string, any>) => (
+          {users.map((user: User | UserWithFollowersCount) => (
             <FollowBarItem key={user.id} user={user} />
           ))}
         </div>

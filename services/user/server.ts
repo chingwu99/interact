@@ -14,16 +14,4 @@ export const userServerService = {
     const data = (await getSsrData(`/users/${userId}`)) as UserWithFollowersCount
     return data
   },
-
-  // // Get current user's notifications
-  // getNotifications: async (userId: string) => {
-  //   const response = await api.get<Notification[]>(`/users/${userId}/notifications`)
-  //   return response.data
-  // },
-
-  // // Update user profile
-  // updateUser: async (data: UpdateUserData) => {
-  //   const response = await api.patch<User>('/users', data)
-  //   return response.data
-  // },
 }

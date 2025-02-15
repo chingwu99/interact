@@ -18,8 +18,8 @@ const UserView = async ({ params }: { params: Promise<IParams> }) => {
   return (
     <>
       <Header showBackArrow label={avatarUser?.name as string} />
-      <UserHero userId={userId as string} avatarUser={avatarUser} />
-      <UserBio userId={userId as string} avatarUser={avatarUser} />
+      <UserHero avatarUser={avatarUser} />
+      <UserBio avatarUser={avatarUser} />
       <PostFeed userId={userId} />
     </>
   )

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 
@@ -15,8 +15,14 @@ export const usePostLike = ({ postId, userId, initialLikedIds }: UsePostLikeProp
   const router = useRouter()
   const loginModal = useLoginModal()
 
-  const [isLiked, setIsLiked] = useState(initialLikedIds?.includes(userId || ''))
-  const [likesCount, setLikesCount] = useState(initialLikedIds?.length || 0)
+  // 使用 useEffect 來更新狀態，確保與 props 同步
+  const [isLiked, setIsLiked] = useState(false)
+  const [likesCount, setLikesCount] = useState(0)
+
+  useEffect(() => {
+    setIsLiked(initialLikedIds?.includes(userId || ''))
+    setLikesCount(initialLikedIds?.length || 0)
+  }, [userId, initialLikedIds])
 
   const toggleLike = useCallback(
     async (event?: React.MouseEvent) => {
@@ -26,32 +32,24 @@ export const usePostLike = ({ postId, userId, initialLikedIds }: UsePostLikeProp
         return loginModal.onOpen()
       }
 
-      const prevIsLiked = isLiked
-      const prevLikesCount = likesCount
-
       try {
-        const request = prevIsLiked
+        const request = isLiked
           ? () => likeClientService.unlikePost({ postId })
           : () => likeClientService.likePost({ postId })
-
-        // 先更新 UI 狀態
-        setIsLiked((prev) => !prev)
-        setLikesCount((prev) => (prevIsLiked ? prev - 1 : prev + 1))
 
         // 執行請求
         await request()
 
-        // 請求成功後更新路由並顯示成功訊息
+        // 請求成功後才更新狀態
+        setIsLiked((prev) => !prev)
+        setLikesCount((prev) => (isLiked ? prev - 1 : prev + 1))
+
         router.refresh()
-        toast.success('Success')
       } catch (error) {
-        // 請求失敗時恢復原狀態
-        setIsLiked(prevIsLiked)
-        setLikesCount(prevLikesCount)
         toast.error('Something went wrong')
       }
     },
-    [postId, userId, isLiked, likesCount, loginModal, router]
+    [postId, userId, isLiked, loginModal, router]
   )
 
   return {

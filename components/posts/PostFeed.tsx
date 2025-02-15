@@ -1,6 +1,6 @@
 import { postServerService } from '@/services/post/server'
 
-import PostItemWrapper from './PostItemWrapper'
+import PostItem from './PostItem'
 
 interface PostFeedProps {
   userId?: string
@@ -12,7 +12,7 @@ const PostFeed: React.FC<PostFeedProps> = async ({ userId }) => {
   return (
     <div className="max-h-[90vh] overflow-y-auto">
       {posts.map((post: Record<string, any>) => (
-        <PostItemWrapper key={post.id} post={post} />
+        <PostItem key={post.id} data={post} />
       ))}
     </div>
   )
