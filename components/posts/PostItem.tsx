@@ -2,16 +2,15 @@
 
 import { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { toast } from 'react-hot-toast'
 import { formatDistanceToNowStrict } from 'date-fns'
-import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from 'react-icons/ai'
 
-import useLoginModal from '@/hooks/useLoginModal'
 import { useAuth } from '@/hooks/useAuth'
-import { likeClientService } from '@/services/like/client'
 import type { UserWithFollowersCount } from '@/services/user/type'
+import { usePostLike } from '@/hooks/usePostLike'
 
 import Avatar from '../Avatar'
+
+import PostActions from './PostActions'
 
 interface PostItemProps {
   data: Record<string, any>
@@ -23,38 +22,12 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser }) =>
   const { user: currentUser } = useAuth()
 
   const router = useRouter()
-  const loginModal = useLoginModal()
 
-  const hasLiked = useMemo(() => {
-    if (!currentUser) return false
-    const list = data?.likedIds || []
-
-    return list.includes(currentUser?.id)
-  }, [data, currentUser])
-
-  const toggleLike = useCallback(async () => {
-    if (!currentUser) {
-      return loginModal.onOpen()
-    }
-
-    try {
-      let request
-
-      if (hasLiked) {
-        request = () => likeClientService.unlikePost({ postId })
-      } else {
-        request = () => likeClientService.likePost({ postId })
-      }
-
-      await request()
-
-      router.refresh()
-
-      toast.success('Success')
-    } catch (error) {
-      toast.error('Something went wrong')
-    }
-  }, [currentUser, hasLiked, router, loginModal, postId])
+  const { isLiked, toggleLike, likesCount } = usePostLike({
+    postId,
+    userId: currentUser?.id,
+    initialLikedIds: data.likedIds || [],
+  })
 
   const goToUser = useCallback(
     (ev: any) => {
@@ -67,21 +40,6 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser }) =>
   const goToPost = useCallback(() => {
     router.push(`/posts/${data.id}`)
   }, [router, data.id])
-
-  const onLike = useCallback(
-    async (ev: any) => {
-      ev.stopPropagation()
-
-      if (!currentUser) {
-        return loginModal.onOpen()
-      }
-
-      toggleLike()
-    },
-    [loginModal, currentUser, toggleLike]
-  )
-
-  const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart
 
   const createdAt = useMemo(() => {
     if (!data?.createdAt) {
@@ -133,40 +91,12 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, postId, avatarUser }) =>
             <span className="text-neutral-500 text-sm">{createdAt}</span>
           </div>
           <div className="text-white mt-1 break-all whitespace-pre-wrap">{data.body}</div>
-          <div className="flex flex-row items-center mt-3 gap-10">
-            <div
-              className="
-                flex 
-                flex-row 
-                items-center 
-                text-neutral-500 
-                gap-2 
-                cursor-pointer 
-                transition 
-                hover:text-sky-500
-            "
-            >
-              <AiOutlineMessage size={20} />
-              <p>{data.comments?.length || 0}</p>
-            </div>
-            <div
-              onClick={onLike}
-              className="
-                flex 
-                flex-row 
-                items-center 
-                text-neutral-500 
-                gap-2 
-                cursor-pointer 
-                transition 
-                hover:text-red-500
-            "
-            >
-              <LikeIcon color={hasLiked ? 'red' : ''} size={20} />
-
-              <p>{data.likedIds.length}</p>
-            </div>
-          </div>
+          <PostActions
+            hasLiked={isLiked}
+            likesCount={likesCount}
+            commentsCount={data.comments?.length || 0}
+            onLike={toggleLike}
+          />
         </div>
       </div>
     </div>
