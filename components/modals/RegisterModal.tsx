@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import useLoginModal from '@/hooks/useLoginModal'
 import useRegisterModal from '@/hooks/useRegisterModal'
-import { useAuth } from '@/hooks/useAuth'
+import { authClientService } from '@/services/auth/client'
 
 import Input from '../Input'
 import Modal from '../Modal'
@@ -15,7 +15,6 @@ import Modal from '../Modal'
 import { registerSchema, RegisterFormValues } from './schema'
 
 const RegisterModal = () => {
-  const { register: registerUser, isInitialized } = useAuth()
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
   const [isLoading, setIsLoading] = useState(false)
@@ -41,16 +40,17 @@ const RegisterModal = () => {
       setIsLoading(true)
 
       // 註冊新帳戶
-      await registerUser({
+      await authClientService.register({
         email: data.email,
         name: data.name,
         username: data.username,
         password: data.password,
       })
 
+      toast.success('Registered successfully')
       registerModal.onClose()
     } catch (error: any) {
-      toast.error(error?.message || 'An error occurred')
+      toast.error(error?.message || 'Registration failed')
     } finally {
       setIsLoading(false)
     }
@@ -59,8 +59,8 @@ const RegisterModal = () => {
   const onToggle = useCallback(() => {
     registerModal.onClose()
     reset()
-    loginModal.onOpen(isInitialized)
-  }, [loginModal, registerModal, reset, isInitialized])
+    loginModal.onOpen()
+  }, [loginModal, registerModal, reset])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">

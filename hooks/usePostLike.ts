@@ -1,36 +1,26 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 
 import useLoginModal from '@/hooks/useLoginModal'
 import { likeClientService } from '@/services/like/client'
-import { useAuth } from '@/hooks/useAuth'
 
 interface UsePostLikeProps {
   postId: string
   userId?: string
-  initialLikedIds: string[]
+  isLiked: boolean
 }
 
-export const usePostLike = ({ postId, userId, initialLikedIds }: UsePostLikeProps) => {
+export const usePostLike = ({ postId, userId, isLiked }: UsePostLikeProps) => {
   const router = useRouter()
   const loginModal = useLoginModal()
-  const { isInitialized } = useAuth()
-  // 使用 useEffect 來更新狀態，確保與 props 同步
-  const [isLiked, setIsLiked] = useState(false)
-  const [likesCount, setLikesCount] = useState(0)
-
-  useEffect(() => {
-    setIsLiked(initialLikedIds?.includes(userId || ''))
-    setLikesCount(initialLikedIds?.length || 0)
-  }, [userId, initialLikedIds])
 
   const toggleLike = useCallback(
     async (event?: React.MouseEvent) => {
       event?.stopPropagation()
 
       if (!userId) {
-        return loginModal.onOpen(isInitialized)
+        return loginModal.onOpen()
       }
 
       try {
@@ -41,21 +31,16 @@ export const usePostLike = ({ postId, userId, initialLikedIds }: UsePostLikeProp
         // 執行請求
         await request()
 
-        // 請求成功後才更新狀態
-        setIsLiked((prev) => !prev)
-        setLikesCount((prev) => (isLiked ? prev - 1 : prev + 1))
-
         router.refresh()
       } catch (error) {
         toast.error('Something went wrong')
       }
     },
-    [postId, userId, isLiked, loginModal, router, isInitialized]
+    [postId, userId, isLiked, loginModal, router]
   )
 
   return {
     isLiked,
-    likesCount,
     toggleLike,
   }
 }

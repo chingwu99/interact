@@ -1,6 +1,5 @@
-import api from '../clientApi'
-
-import type { CommentResponse, CreateCommentData } from './type'
+import api from '../../api/client'
+import type { CommentResponse, CreateCommentData } from '../../type/comment'
 
 export const commentClientService = {
   // Create comment

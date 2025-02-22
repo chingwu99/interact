@@ -1,11 +1,11 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
+import { formatDistanceToNowStrict } from 'date-fns'
 
-import { useAuth } from '@/hooks/useAuth'
+import type { User } from '@/type/user'
 import { usePostLike } from '@/hooks/usePostLike'
-import { useTimeAgo } from '@/hooks/useTimeAgo'
 
 import Avatar from '../Avatar'
 
@@ -13,18 +13,26 @@ import PostActions from './PostActions'
 
 interface PostItemProps {
   data: Record<string, any>
+  currentUser: User | null
+  isLiked: boolean
+  likesCount: number
 }
 
-const PostItem: React.FC<PostItemProps> = ({ data = {} }) => {
+const PostItem: React.FC<PostItemProps> = ({ data = {}, currentUser, isLiked, likesCount }) => {
   const router = useRouter()
 
-  const { user: currentUser } = useAuth()
-  const timeAgo = useTimeAgo(data.createdAt)
+  const createdAt = useMemo(() => {
+    if (!data?.createdAt) {
+      return null
+    }
 
-  const { isLiked, toggleLike, likesCount } = usePostLike({
+    return formatDistanceToNowStrict(new Date(data.createdAt))
+  }, [data.createdAt])
+
+  const { toggleLike } = usePostLike({
     postId: data.id as string,
     userId: currentUser?.id,
-    initialLikedIds: data.likedIds || [],
+    isLiked,
   })
 
   const goToUser = useCallback(
@@ -78,7 +86,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {} }) => {
             >
               @{data.user.username}
             </span>
-            <span className="text-neutral-500 text-sm">{timeAgo}</span>
+            <span className="text-neutral-500 text-sm">{createdAt}</span>
           </div>
           <div className="text-white mt-1 break-all whitespace-pre-wrap">{data.body}</div>
           <PostActions

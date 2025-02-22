@@ -1,31 +1,26 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 
 import useLoginModal from '@/hooks/useLoginModal'
 import { followClientService } from '@/services/follow/client'
-import { useAuth } from '@/hooks/useAuth'
+import type { User } from '@/type/user'
 
 interface UseFollowProps {
   userId: string
-  initialFollowingIds: string[]
+  currentUser: User | null
+  isFollowing: boolean
 }
 
-export const useFollow = ({ userId, initialFollowingIds }: UseFollowProps) => {
+export const useFollow = ({ userId, currentUser, isFollowing }: UseFollowProps) => {
   const router = useRouter()
   const loginModal = useLoginModal()
-  const { checkAuth, user: currentUser, isInitialized } = useAuth()
 
-  const [isFollowing, setIsFollowing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    setIsFollowing(initialFollowingIds?.includes(userId))
-  }, [userId, initialFollowingIds])
 
   const toggleFollow = useCallback(async () => {
     if (!currentUser) {
-      return loginModal.onOpen(isInitialized)
+      return loginModal.onOpen()
     }
 
     try {
@@ -35,15 +30,14 @@ export const useFollow = ({ userId, initialFollowingIds }: UseFollowProps) => {
         : () => followClientService.followUser({ userId })
 
       await request()
-      setIsFollowing((prev) => !prev)
-      await checkAuth()
+
       router.refresh()
     } catch (error) {
       toast.error('Something went wrong')
     } finally {
       setIsLoading(false)
     }
-  }, [userId, isFollowing, loginModal, router, checkAuth, currentUser, isInitialized])
+  }, [userId, isFollowing, loginModal, router, currentUser])
 
   return {
     isFollowing,

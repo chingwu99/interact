@@ -7,12 +7,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { toast } from 'react-hot-toast'
-// import custom hook
-import { ClipLoader } from 'react-spinners'
 
+import type { User } from '@/type/user'
 import useLoginModal from '@/hooks/useLoginModal'
 import useRegisterModal from '@/hooks/useRegisterModal'
-import { useAuth } from '@/hooks/useAuth'
 import { postClientService } from '@/services/post/client'
 import { commentClientService } from '@/services/comment/client'
 
@@ -24,6 +22,7 @@ interface FormProps {
   placeholder: string
   isComment?: boolean
   postId?: string
+  currentUser: User | null
 }
 
 const formSchema = z.object({
@@ -32,12 +31,10 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
-const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
+const Form: React.FC<FormProps> = ({ placeholder, isComment, postId, currentUser }) => {
   const router = useRouter()
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
-
-  const { user: currentUser, isLoading: isAuthLoading, isInitialized } = useAuth()
 
   const {
     register,
@@ -74,14 +71,6 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  if (isAuthLoading) {
-    return (
-      <div className="h-[34vh] flex flex-col justify-center items-center ">
-        <ClipLoader color="#906B7F" size={80} />
-      </div>
-    )
   }
 
   return (
@@ -133,8 +122,8 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
           <Image alt="Logo" src="/officialLogo.png" quality={100} height="71" width="340" />
           <h1 className="text-white text-xl text-center mb-4 font-bold my-8">Welcome to Interact</h1>
           <div className="flex flex-row items-center justify-center gap-4">
-            <Button label="Login" onClick={() => loginModal.onOpen(isInitialized)} />
-            <Button label="Register" onClick={() => registerModal.onOpen(isInitialized)} secondary />
+            <Button label="Login" onClick={() => loginModal.onOpen()} />
+            <Button label="Register" onClick={() => registerModal.onOpen()} secondary />
           </div>
         </div>
       )}

@@ -6,9 +6,9 @@ import { toast } from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import type { User } from '@/type/user'
 import { userClientService } from '@/services/user/client'
 import useEditModal from '@/hooks/useEditModal'
-import { useAuth } from '@/hooks/useAuth'
 
 import Input from '../Input'
 import Modal from '../Modal'
@@ -16,12 +16,14 @@ import ImageUpload from '../ImageUpload'
 
 import { editSchema, EditFormValues } from './schema'
 
-const EditModal: React.FC = () => {
+interface EditModalProps {
+  currentUser: User | null
+}
+
+const EditModal: React.FC<EditModalProps> = ({ currentUser }) => {
   const router = useRouter()
   const editModal = useEditModal()
   const [isLoading, setIsLoading] = useState(false)
-
-  const { user: currentUser, checkAuth } = useAuth()
 
   const defaultValues = useMemo(
     () => ({
@@ -62,7 +64,6 @@ const EditModal: React.FC = () => {
 
       await userClientService.updateUser(data)
 
-      checkAuth()
       router.refresh()
       toast.success('Updated')
       editModal.onClose()

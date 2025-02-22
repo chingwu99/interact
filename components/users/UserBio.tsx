@@ -5,25 +5,24 @@ import { format } from 'date-fns'
 import { BiCalendar } from 'react-icons/bi'
 
 import useEditModal from '@/hooks/useEditModal'
-import type { UserWithFollowersCount } from '@/services/user/type'
-import { useAuth } from '@/hooks/useAuth'
+import type { UserWithFollowersCount, User } from '@/type/user'
 import { useFollow } from '@/hooks/useFollow'
 
 import Button from '../Button'
-import LoaderMini from '../LoaderMini'
 
 interface UserBioProps {
   avatarUser: UserWithFollowersCount | null
+  currentUser: User | null
+  isFollowing: boolean
 }
 
-const UserBio: React.FC<UserBioProps> = ({ avatarUser }) => {
-  const { user: currentUser, isInitialized } = useAuth()
-
+const UserBio: React.FC<UserBioProps> = ({ avatarUser, currentUser, isFollowing }) => {
   const editModal = useEditModal()
 
-  const { isFollowing, toggleFollow, isLoading } = useFollow({
+  const { toggleFollow, isLoading } = useFollow({
     userId: avatarUser?.id as string,
-    initialFollowingIds: currentUser?.followingIds || [],
+    currentUser,
+    isFollowing,
   })
 
   const createdAt = useMemo(() => {
@@ -37,9 +36,7 @@ const UserBio: React.FC<UserBioProps> = ({ avatarUser }) => {
   return (
     <div className="border-b-[1px] border-neutral-800 pb-4">
       <div className="flex justify-end p-2">
-        {!isInitialized ? (
-          <LoaderMini />
-        ) : currentUser?.id === avatarUser?.id ? (
+        {currentUser?.id === avatarUser?.id ? (
           <Button secondary label="Edit" onClick={editModal.onOpen} />
         ) : (
           <Button
@@ -48,7 +45,6 @@ const UserBio: React.FC<UserBioProps> = ({ avatarUser }) => {
             secondary={!isFollowing}
             outline={isFollowing}
             disabled={isLoading}
-            isLoading={isLoading}
           />
         )}
       </div>
