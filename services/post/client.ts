@@ -1,6 +1,5 @@
-import api from '../clientApi'
-
-import type { Post, CreatePostData } from './type'
+import api from '../../api/client'
+import type { Post, CreatePostData } from '../../type/post'
 
 export const postClientService = {
   // Create new post

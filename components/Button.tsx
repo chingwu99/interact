@@ -1,5 +1,3 @@
-import LoaderMini from '@/components/LoaderMini'
-
 interface ButtonProps {
   label: string
   secondary?: boolean
@@ -8,19 +6,9 @@ interface ButtonProps {
   onClick: () => void
   disabled?: boolean
   outline?: boolean
-  isLoading?: boolean
 }
 
-const Button: React.FC<ButtonProps> = ({
-  label,
-  secondary,
-  fullWidth,
-  onClick,
-  large,
-  disabled,
-  outline,
-  isLoading,
-}) => (
+const Button: React.FC<ButtonProps> = ({ label, secondary, fullWidth, onClick, large, disabled, outline }) => (
   <button
     disabled={disabled}
     onClick={onClick}
@@ -49,7 +37,6 @@ const Button: React.FC<ButtonProps> = ({
       `}
   >
     {label}
-    {isLoading && <LoaderMini />}
   </button>
 )
 

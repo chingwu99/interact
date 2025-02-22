@@ -1,6 +1,5 @@
-import api from '../clientApi'
-
-import type { LikeResponse, LikePostData } from './type'
+import api from '../../api/client'
+import type { LikeResponse, LikePostData } from '../../type/like'
 
 export const likeClientService = {
   // Like a post

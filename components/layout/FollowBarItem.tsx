@@ -1,4 +1,4 @@
-import type { User, UserWithFollowersCount } from '@/services/user/type'
+import type { User, UserWithFollowersCount } from '@/type/user'
 
 import Avatar from '../Avatar'
 

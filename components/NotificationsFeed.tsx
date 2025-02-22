@@ -1,52 +1,19 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
-import { useAuth } from '@/hooks/useAuth'
-import { userClientService } from '@/services/user/client'
-import type { Notification } from '@/services/user/type'
+import { getServerSession } from '@/action/getServerSession'
+import { getNotifications } from '@/action/getNotifications'
 
-import Loader from './Loader'
+const NotificationsFeed: React.FC = async () => {
+  const currentUser = await getServerSession()
+  const notifications = await getNotifications({ userId: currentUser?.id })
 
-const NotificationsFeed: React.FC = () => {
-  const { user: currentUser, checkAuth } = useAuth()
-  const [fetchedNotifications, setFetchedNotifications] = useState<Notification[]>([])
-
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    checkAuth()
-  }, [checkAuth])
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      if (currentUser) {
-        try {
-          const notifications = await userClientService.getNotifications(currentUser.id)
-          setFetchedNotifications(notifications)
-        } catch (error) {
-          console.error('Failed to fetch notifications:', error)
-        }
-      }
-
-      setIsLoading(false)
-    }
-
-    fetchNotifications()
-  }, [currentUser])
-
-  if (isLoading) {
-    return <Loader />
-  }
-
-  if (fetchedNotifications.length === 0) {
+  if (notifications?.length === 0) {
     return <div className="text-neutral-600 text-center p-6 text-xl">No notifications</div>
   }
 
   return (
     <div className="flex flex-col">
-      {fetchedNotifications.map((notification) => (
+      {notifications.map((notification) => (
         <div key={notification.id} className="flex flex-row items-center p-6 gap-4 border-b-[1px] border-neutral-800">
           <Image alt="Logo" src="/images/components/layout/logo.svg" quality={100} height={50} width={50} />
           <p className="text-white">{notification.body}</p>

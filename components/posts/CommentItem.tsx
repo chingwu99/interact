@@ -1,9 +1,8 @@
 'use client'
 
+import { useCallback, useMemo } from 'react'
+import { formatDistanceToNowStrict } from 'date-fns'
 import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
-
-import { useTimeAgo } from '@/hooks/useTimeAgo'
 
 import Avatar from '../Avatar'
 
@@ -13,7 +12,6 @@ interface CommentItemProps {
 
 const CommentItem: React.FC<CommentItemProps> = ({ data = {} }) => {
   const router = useRouter()
-  const timeAgo = useTimeAgo(data.createdAt)
 
   const goToUser = useCallback(
     (ev: any) => {
@@ -23,6 +21,14 @@ const CommentItem: React.FC<CommentItemProps> = ({ data = {} }) => {
     },
     [router, data.user.id]
   )
+
+  const createdAt = useMemo(() => {
+    if (!data?.createdAt) {
+      return null
+    }
+
+    return formatDistanceToNowStrict(new Date(data.createdAt))
+  }, [data.createdAt])
 
   return (
     <div
@@ -62,7 +68,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ data = {} }) => {
             >
               @{data.user.username}
             </span>
-            <span className="text-neutral-500 text-sm">{timeAgo}</span>
+            <span className="text-neutral-500 text-sm">{createdAt}</span>
           </div>
           <div className="text-white mt-1">{data.body}</div>
         </div>

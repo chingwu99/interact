@@ -1,6 +1,5 @@
-import api from '../clientApi'
-
-import type { FollowResponse, FollowUserData } from './type'
+import api from '../../api/client'
+import type { FollowResponse, FollowUserData } from '../../type/follow'
 
 export const followClientService = {
   // Follow user

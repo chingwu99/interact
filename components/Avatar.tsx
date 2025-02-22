@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import Image from 'next/image'
 
-import type { UserWithFollowersCount, User } from '@/services/user/type'
+import type { UserWithFollowersCount, User } from '@/type/user'
 
 interface AvatarProps {
   isLarge?: boolean

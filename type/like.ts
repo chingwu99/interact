@@ -1,4 +1,4 @@
-import type { Post } from '../post/type'
+import type { Post } from './post'
 
 export interface LikePostData {
   postId: string

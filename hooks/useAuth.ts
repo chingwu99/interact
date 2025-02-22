@@ -2,33 +2,20 @@ import { create } from 'zustand'
 import { toast } from 'react-hot-toast'
 
 import { authClientService } from '@/services/auth/client'
-import type { LoginCredentials, RegisterCredentials } from '@/services/auth/type'
+import type { LoginCredentials, RegisterCredentials } from '@/type/auth'
 
 interface AuthStore {
-  user: any | null
-  isLoading: boolean
-  isAuthenticated: boolean
-  isInitialized: boolean
   // eslint-disable-next-line
   login: (credentials: LoginCredentials) => Promise<void>
   // eslint-disable-next-line
   register: (credentials: RegisterCredentials) => Promise<void>
   logout: () => Promise<void>
-  checkAuth: () => Promise<void>
-  // eslint-disable-next-line
-  setIsLoading: (isLoading: boolean) => void
 }
 
-export const useAuth = create<AuthStore>((set) => ({
-  user: null,
-  isLoading: true,
-  isAuthenticated: false,
-  isInitialized: false,
-
+export const useAuth = create<AuthStore>(() => ({
   login: async (credentials) => {
     try {
-      const user = await authClientService.login(credentials)
-      set({ user, isAuthenticated: true })
+      await authClientService.login(credentials)
       toast.success('Logged in successfully')
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Login failed')
@@ -38,8 +25,7 @@ export const useAuth = create<AuthStore>((set) => ({
 
   register: async (credentials) => {
     try {
-      const user = await authClientService.register(credentials)
-      set({ user, isAuthenticated: true })
+      await authClientService.register(credentials)
       toast.success('Registered successfully')
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Registration failed')
@@ -50,44 +36,10 @@ export const useAuth = create<AuthStore>((set) => ({
   logout: async () => {
     try {
       await authClientService.logout()
-      set({ user: null, isAuthenticated: false })
       toast.success('Logged out successfully')
     } catch (error: any) {
       toast.error('Logout failed')
       throw error
     }
-  },
-
-  checkAuth: async () => {
-    if (!localStorage.getItem('token')) {
-      set({
-        user: null,
-        isAuthenticated: false,
-        isLoading: false,
-        isInitialized: true,
-      })
-      return
-    }
-
-    try {
-      const user = await authClientService.getCurrentUser()
-      set({
-        user,
-        isAuthenticated: !!user,
-        isLoading: false,
-        isInitialized: true,
-      })
-    } catch (error) {
-      set({
-        user: null,
-        isAuthenticated: false,
-        isLoading: false,
-        isInitialized: true,
-      })
-    }
-  },
-
-  setIsLoading: (isLoading: boolean) => {
-    set({ isLoading })
   },
 }))

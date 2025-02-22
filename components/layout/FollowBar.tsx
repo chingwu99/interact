@@ -1,12 +1,12 @@
-import type { User, UserWithFollowersCount } from '@/services/user/type'
-import { userServerService } from '@/services/user/server'
+import type { User, UserWithFollowersCount } from '@/type/user'
+import { getUsers } from '@/action/getUsers'
 
 import FollowBarItem from './FollowBarItem'
 
 const FollowBar = async () => {
-  const users = await userServerService.getUsers()
+  const users = await getUsers()
 
-  if (users.length === 0) {
+  if (users?.length === 0) {
     return null
   }
 
