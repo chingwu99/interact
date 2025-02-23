@@ -2,7 +2,7 @@
 import { getUser } from '@/action/getUser'
 // import components
 import Header from '@/components/Header'
-import UserBio from '@/components/users/UserBio'
+import UserBioWrapper from '@/components/users/UserBioWrapper'
 import UserHero from '@/components/users/UserHero'
 import PostFeed from '@/components/posts/PostFeed'
 import { getServerSession } from '@/action/getServerSession'
@@ -21,7 +21,7 @@ const UserView = async ({ params }: { params: Promise<IParams> }) => {
     <>
       <Header showBackArrow label={avatarUser?.name as string} />
       <UserHero avatarUser={avatarUser} />
-      <UserBio avatarUser={avatarUser} currentUser={currentUser} isFollowing={isFollowing} />
+      <UserBioWrapper avatarUser={avatarUser} currentUser={currentUser} isFollowing={isFollowing} />
       <PostFeed userId={userId} currentUser={currentUser} />
     </>
   )

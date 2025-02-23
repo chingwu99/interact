@@ -1,16 +1,16 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
-import { formatDistanceToNowStrict } from 'date-fns'
+import { useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 
 import Avatar from '../Avatar'
 
 interface CommentItemProps {
   data: Record<string, any>
+  createdAt: string | null
 }
 
-const CommentItem: React.FC<CommentItemProps> = ({ data = {} }) => {
+const CommentItem: React.FC<CommentItemProps> = ({ data = {}, createdAt }) => {
   const router = useRouter()
 
   const goToUser = useCallback(
@@ -21,14 +21,6 @@ const CommentItem: React.FC<CommentItemProps> = ({ data = {} }) => {
     },
     [router, data.user.id]
   )
-
-  const createdAt = useMemo(() => {
-    if (!data?.createdAt) {
-      return null
-    }
-
-    return formatDistanceToNowStrict(new Date(data.createdAt))
-  }, [data.createdAt])
 
   return (
     <div

@@ -1,7 +1,7 @@
 import type { User } from '@/type/user'
 import { getPosts } from '@/action/getPosts'
 
-import PostItem from './PostItem'
+import PostItemWrapper from './PostItemWrapper'
 
 interface PostFeedProps {
   userId?: string
@@ -17,7 +17,7 @@ const PostFeed: React.FC<PostFeedProps> = async ({ userId, currentUser }) => {
   return (
     <div className="max-h-[90vh] overflow-y-auto">
       {posts.map((post: Record<string, any>) => (
-        <PostItem
+        <PostItemWrapper
           key={post.id}
           data={post}
           currentUser={currentUser}

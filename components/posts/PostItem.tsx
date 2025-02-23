@@ -1,8 +1,7 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { formatDistanceToNowStrict } from 'date-fns'
 
 import type { User } from '@/type/user'
 import { usePostLike } from '@/hooks/usePostLike'
@@ -16,18 +15,11 @@ interface PostItemProps {
   currentUser: User | null
   isLiked: boolean
   likesCount: number
+  createdAt: string | null
 }
 
-const PostItem: React.FC<PostItemProps> = ({ data = {}, currentUser, isLiked, likesCount }) => {
+const PostItem: React.FC<PostItemProps> = ({ data = {}, currentUser, isLiked, likesCount, createdAt }) => {
   const router = useRouter()
-
-  const createdAt = useMemo(() => {
-    if (!data?.createdAt) {
-      return null
-    }
-
-    return formatDistanceToNowStrict(new Date(data.createdAt))
-  }, [data.createdAt])
 
   const { toggleLike } = usePostLike({
     postId: data.id as string,

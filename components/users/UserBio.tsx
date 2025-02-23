@@ -1,7 +1,5 @@
 'use client'
 
-import { useMemo } from 'react'
-import { format } from 'date-fns'
 import { BiCalendar } from 'react-icons/bi'
 
 import useEditModal from '@/hooks/useEditModal'
@@ -14,9 +12,10 @@ interface UserBioProps {
   avatarUser: UserWithFollowersCount | null
   currentUser: User | null
   isFollowing: boolean
+  createdAt: string | null
 }
 
-const UserBio: React.FC<UserBioProps> = ({ avatarUser, currentUser, isFollowing }) => {
+const UserBio: React.FC<UserBioProps> = ({ avatarUser, currentUser, isFollowing, createdAt }) => {
   const editModal = useEditModal()
 
   const { toggleFollow, isLoading } = useFollow({
@@ -24,14 +23,6 @@ const UserBio: React.FC<UserBioProps> = ({ avatarUser, currentUser, isFollowing 
     currentUser,
     isFollowing,
   })
-
-  const createdAt = useMemo(() => {
-    if (!avatarUser?.createdAt) {
-      return null
-    }
-
-    return format(new Date(avatarUser.createdAt), 'MMMM yyyy')
-  }, [avatarUser?.createdAt])
 
   return (
     <div className="border-b-[1px] border-neutral-800 pb-4">
