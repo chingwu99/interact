@@ -1,17 +1,21 @@
-import getCurrentUser from '@/app/actions/getCurrentUser'
-import getUserById from '@/app/actions/getUserById'
+import { User } from '@/type/user'
+
+import { formatCreatedAt } from '../../utils/formatCreatedAt'
 
 import PostItem from './PostItem'
 
 interface PostItemWrapperProps {
-  post: Record<string, any>
+  data: Record<string, any>
+  currentUser: User | null
+  isLiked: boolean
+  likesCount: number
 }
 
-const PostItemWrapper: React.FC<PostItemWrapperProps> = async ({ post }) => {
-  const currentUser = await getCurrentUser()
-  const avatarUser = await getUserById({ userId: post.user.id })
+const PostItemWrapper: React.FC<PostItemWrapperProps> = ({ data = {}, currentUser, isLiked, likesCount }) => {
+  const createdAt = formatCreatedAt(data.createdAt)
+
   return (
-    <PostItem postId={post.id as string} key={post.id} data={post} currentUser={currentUser} avatarUser={avatarUser} />
+    <PostItem data={data} currentUser={currentUser} isLiked={isLiked} likesCount={likesCount} createdAt={createdAt} />
   )
 }
 

@@ -1,20 +1,31 @@
-import getPosts from '@/app/actions/getPosts'
+import type { User } from '@/type/user'
+import { getPosts } from '@/action/getPosts'
 
 import PostItemWrapper from './PostItemWrapper'
 
 interface PostFeedProps {
   userId?: string
+  currentUser: User | null
 }
 
-const PostFeed: React.FC<PostFeedProps> = async ({ userId }) => {
+const PostFeed: React.FC<PostFeedProps> = async ({ userId, currentUser }) => {
   const posts = await getPosts({ userId })
 
+  const isLiked = (post: Record<string, any>) => post.likedIds?.includes(currentUser?.id as string) || false
+  const likesCount = (post: Record<string, any>) => post.likedIds?.length || 0
+
   return (
-    <>
+    <div className="max-h-[90vh] overflow-y-auto">
       {posts.map((post: Record<string, any>) => (
-        <PostItemWrapper key={post.id} post={post} />
+        <PostItemWrapper
+          key={post.id}
+          data={post}
+          currentUser={currentUser}
+          isLiked={isLiked(post)}
+          likesCount={likesCount(post)}
+        />
       ))}
-    </>
+    </div>
   )
 }
 

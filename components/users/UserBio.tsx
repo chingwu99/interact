@@ -1,73 +1,33 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
-import { format } from 'date-fns'
-import axios from 'axios'
-import { toast } from 'react-hot-toast'
 import { BiCalendar } from 'react-icons/bi'
-// @ts-ignore
-import { User } from '@prisma/client'
 
-import useLoginModal from '@/hooks/useLoginModal'
 import useEditModal from '@/hooks/useEditModal'
-import { UserWithFollowersCount } from '@/types'
+import type { UserWithFollowersCount, User } from '@/type/user'
+import { useFollow } from '@/hooks/useFollow'
 
 import Button from '../Button'
 
 interface UserBioProps {
   avatarUser: UserWithFollowersCount | null
-  userId: string
   currentUser: User | null
+  isFollowing: boolean
+  createdAt: string | null
 }
 
-const UserBio: React.FC<UserBioProps> = ({ userId, avatarUser, currentUser }) => {
-  const router = useRouter()
+const UserBio: React.FC<UserBioProps> = ({ avatarUser, currentUser, isFollowing, createdAt }) => {
   const editModal = useEditModal()
-  const loginModal = useLoginModal()
 
-  const createdAt = useMemo(() => {
-    if (!avatarUser?.createdAt) {
-      return null
-    }
-
-    return format(new Date(avatarUser.createdAt), 'MMMM yyyy')
-  }, [avatarUser?.createdAt])
-
-  const isFollowing = useMemo(() => {
-    const list = currentUser?.followingIds || []
-
-    return list.includes(userId)
-  }, [currentUser, userId])
-
-  const toggleFollow = useCallback(async () => {
-    if (!currentUser) {
-      return loginModal.onOpen()
-    }
-
-    try {
-      let request
-
-      if (isFollowing) {
-        request = () => axios.delete('/api/follow', { data: { userId } })
-      } else {
-        request = () => axios.post('/api/follow', { userId })
-      }
-
-      await request()
-
-      router.refresh()
-
-      toast.success('Success')
-    } catch (error) {
-      toast.error('Something went wrong')
-    }
-  }, [currentUser, isFollowing, userId, router, loginModal])
+  const { toggleFollow, isLoading } = useFollow({
+    userId: avatarUser?.id as string,
+    currentUser,
+    isFollowing,
+  })
 
   return (
     <div className="border-b-[1px] border-neutral-800 pb-4">
       <div className="flex justify-end p-2">
-        {currentUser?.id === userId ? (
+        {currentUser?.id === avatarUser?.id ? (
           <Button secondary label="Edit" onClick={editModal.onOpen} />
         ) : (
           <Button
@@ -75,6 +35,7 @@ const UserBio: React.FC<UserBioProps> = ({ userId, avatarUser, currentUser }) =>
             label={isFollowing ? 'Unfollow' : 'Follow'}
             secondary={!isFollowing}
             outline={isFollowing}
+            disabled={isLoading}
           />
         )}
       </div>

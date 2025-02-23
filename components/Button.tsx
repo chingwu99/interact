@@ -20,6 +20,10 @@ const Button: React.FC<ButtonProps> = ({ label, secondary, fullWidth, onClick, l
         hover:opacity-80
         transition
         border-2
+        flex 
+        items-center 
+        justify-center
+        gap-2
         ${fullWidth ? 'w-full' : 'w-fit'}
         ${secondary ? 'bg-white' : '   bg-[#906B7F]'}
         ${secondary ? 'text-black' : 'text-white'}

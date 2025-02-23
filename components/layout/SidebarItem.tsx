@@ -6,9 +6,7 @@ import { IconType } from 'react-icons'
 import { BsDot } from 'react-icons/bs'
 
 import useLoginModal from '@/hooks/useLoginModal'
-
-// eslint-disable-next-line import/order
-import { User } from '@prisma/client'
+import type { User } from '@/type/user'
 
 interface SidebarItemProps {
   label: string

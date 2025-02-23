@@ -1,11 +1,11 @@
 'use client'
 
-import { signOut } from 'next-auth/react'
-// @ts-ignore
-import { User } from '@prisma/client'
 import { BiLogOut } from 'react-icons/bi'
 import { BsHouseFill, BsBellFill } from 'react-icons/bs'
 import { FaUser } from 'react-icons/fa'
+
+import type { User } from '@/type/user'
+import { useAuth } from '@/hooks/useAuth'
 
 import SidebarItem from './SidebarItem'
 import SidebarLogo from './SidebarLogo'
@@ -16,6 +16,8 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
+  const { logout } = useAuth()
+
   const items = [
     {
       icon: BsHouseFill,
@@ -37,6 +39,12 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
     },
   ]
 
+  const handleLogout = async () => {
+    await logout()
+
+    window.location.href = '/'
+  }
+
   return (
     <div className="col-span-1 h-full  md:pr-6 ">
       <div className="flex flex-col">
@@ -55,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
           ))}
 
           {currentUser && (
-            <SidebarItem onClick={() => signOut()} icon={BiLogOut} label="Logout" currentUser={currentUser} />
+            <SidebarItem onClick={handleLogout} icon={BiLogOut} label="Logout" currentUser={currentUser} />
           )}
           <SidebarInteractButton currentUser={currentUser} />
         </div>

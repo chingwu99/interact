@@ -8,8 +8,7 @@ import LoginModal from '@/components/modals/LoginModal'
 import RegisterModal from '@/components/modals/RegisterModal'
 import EditModal from '@/components/modals/EditModal'
 import ToasterProvider from '@/providers/ToasterProvider'
-
-import getCurrentUser from './actions/getCurrentUser'
+import { getServerSession } from '@/action/getServerSession'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,7 +22,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const currentUser = await getCurrentUser()
+  const currentUser = await getServerSession()
 
   return (
     <html lang="en">
@@ -39,11 +38,11 @@ export default async function RootLayout({
 
             <div
               className="
-              col-span-3 
-              lg:col-span-2 
-              border-x-[1px] 
-              border-neutral-800
-          "
+                col-span-3 
+                lg:col-span-2 
+                border-x-[1px] 
+                border-neutral-800
+            "
             >
               {children}
             </div>
