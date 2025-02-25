@@ -5,10 +5,9 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
-// @ts-ignore
-import { User } from '@prisma/client'
 
+import type { User } from '@/type/user'
+import { userClientService } from '@/services/user/client'
 import useEditModal from '@/hooks/useEditModal'
 
 import Input from '../Input'
@@ -63,14 +62,14 @@ const EditModal: React.FC<EditModalProps> = ({ currentUser }) => {
     try {
       setIsLoading(true)
 
-      await axios.patch('/api/edit', data)
+      await userClientService.updateUser(data)
 
       router.refresh()
       toast.success('Updated')
       editModal.onClose()
     } catch (error) {
       toast.error('Something went wrong')
-      console.log(error)
+      // console.log(error)
     } finally {
       setIsLoading(false)
     }

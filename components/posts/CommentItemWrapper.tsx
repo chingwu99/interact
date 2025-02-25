@@ -1,14 +1,15 @@
-import getUserById from '@/app/actions/getUserById'
+import { formatCreatedAt } from '../../utils/formatCreatedAt'
 
 import CommentItem from './CommentItem'
 
 interface CommentItemWrapperProps {
-  comment: Record<string, any>
+  data: Record<string, any>
 }
 
-const CommentItemWrapper: React.FC<CommentItemWrapperProps> = async ({ comment }) => {
-  const avatarUser = await getUserById({ userId: comment.user.id })
-  return <CommentItem data={comment} avatarUser={avatarUser} />
+const CommentItemWrapper: React.FC<CommentItemWrapperProps> = ({ data = {} }) => {
+  const createdAt = formatCreatedAt(data.createdAt)
+
+  return <CommentItem data={data} createdAt={createdAt} />
 }
 
 export default CommentItemWrapper

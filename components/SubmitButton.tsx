@@ -1,3 +1,7 @@
+'use client'
+
+import LoaderMini from './LoaderMini'
+
 interface ButtonProps {
   label: string
   secondary?: boolean
@@ -6,9 +10,19 @@ interface ButtonProps {
   disabled?: boolean
   outline?: boolean
   type?: 'button' | 'submit' | 'reset'
+  isLoading?: boolean
 }
 
-const Button: React.FC<ButtonProps> = ({ label, secondary, fullWidth, large, disabled, outline, type = 'button' }) => (
+const Button: React.FC<ButtonProps> = ({
+  label,
+  secondary,
+  fullWidth,
+  large,
+  disabled,
+  outline,
+  type = 'button',
+  isLoading = false,
+}) => (
   <button
     disabled={disabled}
     type={type}
@@ -20,6 +34,10 @@ const Button: React.FC<ButtonProps> = ({ label, secondary, fullWidth, large, dis
         hover:opacity-80
         transition
         border-2
+        flex  
+        items-center 
+        justify-center 
+        gap-2
         ${fullWidth ? 'w-full' : 'w-fit'}
         ${secondary ? 'bg-white' : '   bg-[#906B7F]'}
         ${secondary ? 'text-black' : 'text-white'}
@@ -33,6 +51,7 @@ const Button: React.FC<ButtonProps> = ({ label, secondary, fullWidth, large, dis
       `}
   >
     {label}
+    {isLoading && <LoaderMini />}
   </button>
 )
 

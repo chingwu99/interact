@@ -1,14 +1,14 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
-import { useCallback, useState } from 'react'
 import { toast } from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
+import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import useLoginModal from '@/hooks/useLoginModal'
 import useRegisterModal from '@/hooks/useRegisterModal'
+import { authClientService } from '@/services/auth/client'
 
 import Input from '../Input'
 import Modal from '../Modal'
@@ -38,22 +38,16 @@ const LoginModal = () => {
   const onSubmit = async (data: LoginFormValues) => {
     try {
       setIsLoading(true)
-
-      const result = await signIn('credentials', {
+      await authClientService.login({
         email: data.email,
         password: data.password,
-        redirect: false,
       })
 
-      if (result?.ok) {
-        toast.success('Logged in')
-        router.refresh()
-        loginModal.onClose()
-      } else {
-        toast.error(result?.error || 'Something went wrong')
-      }
-    } catch (error) {
-      toast.error('Something went wrong')
+      toast.success('Logged in successfully')
+      loginModal.onClose()
+      router.refresh()
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Login failed')
     } finally {
       setIsLoading(false)
     }

@@ -1,15 +1,13 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
 import { useCallback, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 
 import useLoginModal from '@/hooks/useLoginModal'
 import useRegisterModal from '@/hooks/useRegisterModal'
+import { authClientService } from '@/services/auth/client'
 
 import Input from '../Input'
 import Modal from '../Modal'
@@ -17,7 +15,6 @@ import Modal from '../Modal'
 import { registerSchema, RegisterFormValues } from './schema'
 
 const RegisterModal = () => {
-  const router = useRouter()
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
   const [isLoading, setIsLoading] = useState(false)
@@ -43,25 +40,17 @@ const RegisterModal = () => {
       setIsLoading(true)
 
       // 註冊新帳戶
-      await axios.post('/api/register', data)
-      toast.success('Account created')
-
-      // 自動登入
-      const result = await signIn('credentials', {
+      await authClientService.register({
         email: data.email,
+        name: data.name,
+        username: data.username,
         password: data.password,
-        redirect: false,
       })
 
-      if (result?.ok) {
-        toast.success('Login successful')
-        router.refresh()
-        registerModal.onClose()
-      } else {
-        throw new Error(result?.error || 'An error occurred')
-      }
+      toast.success('Registered successfully')
+      registerModal.onClose()
     } catch (error: any) {
-      toast.error(error?.message || 'An error occurred')
+      toast.error(error?.message || 'Registration failed')
     } finally {
       setIsLoading(false)
     }

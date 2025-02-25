@@ -1,12 +1,15 @@
-// import actions
-import getPostById, { IParams } from '@/app/actions/getPostById'
-import getUserById from '@/app/actions/getUserById'
-import getCurrentUser from '@/app/actions/getCurrentUser'
 // import components
 import Header from '@/components/Header'
 import Form from '@/components/Form'
 import PostItem from '@/components/posts/PostItem'
 import CommentFeed from '@/components/posts/CommentFeed'
+// import services
+import { getPost } from '@/action/getPost'
+import { getServerSession } from '@/action/getServerSession'
+
+interface IParams {
+  postId: string
+}
 
 interface PostViewProps {
   params: Promise<IParams>
@@ -14,33 +17,17 @@ interface PostViewProps {
 
 const PostView = async ({ params }: PostViewProps) => {
   const { postId } = await params
-  const fetchedPost = await getPostById({ postId })
-  const currentUser = await getCurrentUser()
-  const avatarUser = await getUserById({ userId: fetchedPost.userId })
-
-  let currentFetchedUser = null
-
-  if (currentUser) {
-    currentFetchedUser = await getUserById({ userId: currentUser?.id })
-  }
+  const postData = await getPost({ postId })
+  const currentUser = await getServerSession()
+  const isLiked = postData.likedIds?.includes(currentUser?.id as string) || false
+  const likesCount = postData.likedIds?.length || 0
 
   return (
     <>
       <Header showBackArrow label="Interact" />
-      <PostItem
-        postId={fetchedPost.id as string}
-        data={fetchedPost}
-        avatarUser={avatarUser}
-        currentUser={currentUser}
-      />
-      <Form
-        postId={postId as string}
-        isComment
-        placeholder="Interact your reply"
-        avatarUser={currentFetchedUser}
-        currentUser={currentUser}
-      />
-      <CommentFeed comments={fetchedPost?.comments} />
+      <PostItem data={postData} currentUser={currentUser} isLiked={isLiked} likesCount={likesCount} />
+      <Form postId={postId as string} isComment placeholder="Interact your reply" currentUser={currentUser} />
+      <CommentFeed comments={postData?.comments} />
     </>
   )
 }

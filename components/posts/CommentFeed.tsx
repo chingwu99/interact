@@ -7,7 +7,7 @@ interface CommentFeedProps {
 const CommentFeed: React.FC<CommentFeedProps> = ({ comments = [] }) => (
   <>
     {comments.map((comment: Record<string, any>) => (
-      <CommentItemWrapper key={comment.id} comment={comment} />
+      <CommentItemWrapper key={comment.id} data={comment} />
     ))}
   </>
 )
