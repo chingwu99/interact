@@ -69,7 +69,8 @@ const EditModal: React.FC<EditModalProps> = ({ currentUser }) => {
       editModal.onClose()
     } catch (error) {
       toast.error('Something went wrong')
-      // console.log(error)
+
+      window.location.href = '/'
     } finally {
       setIsLoading(false)
     }
