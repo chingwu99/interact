@@ -7,7 +7,7 @@ const NotificationsFeed: React.FC = async () => {
   const currentUser = await getServerSession()
   const notifications = (await getNotifications({ userId: currentUser?.id })) || []
 
-  if (notifications?.length === 0) {
+  if (!notifications || notifications.length === 0) {
     return <div className="text-neutral-600 text-center p-6 text-xl">No notifications</div>
   }
 
