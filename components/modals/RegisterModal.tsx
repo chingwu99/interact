@@ -49,6 +49,8 @@ const RegisterModal = () => {
 
       toast.success('Registered successfully')
       registerModal.onClose()
+      reset()
+      loginModal.onOpen()
     } catch (error: any) {
       toast.error(error?.message || 'Registration failed')
     } finally {

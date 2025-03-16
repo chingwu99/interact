@@ -68,6 +68,8 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId, currentUser
       router.refresh()
     } catch (error) {
       toast.error('Something went wrong')
+
+      window.location.href = '/'
     } finally {
       setIsLoading(false)
     }
