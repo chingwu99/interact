@@ -34,6 +34,8 @@ export const useFollow = ({ userId, currentUser, isFollowing }: UseFollowProps) 
       router.refresh()
     } catch (error) {
       toast.error('Something went wrong')
+
+      window.location.href = '/'
     } finally {
       setIsLoading(false)
     }

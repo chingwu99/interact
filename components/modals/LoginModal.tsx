@@ -1,7 +1,6 @@
 'use client'
 
 import { toast } from 'react-hot-toast'
-import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -16,7 +15,6 @@ import Modal from '../Modal'
 import { loginSchema, LoginFormValues } from './schema'
 
 const LoginModal = () => {
-  const router = useRouter()
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
   const [isLoading, setIsLoading] = useState(false)
@@ -45,7 +43,8 @@ const LoginModal = () => {
 
       toast.success('Logged in successfully')
       loginModal.onClose()
-      router.refresh()
+
+      window.location.href = '/'
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Login failed')
     } finally {

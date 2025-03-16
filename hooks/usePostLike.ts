@@ -34,6 +34,8 @@ export const usePostLike = ({ postId, userId, isLiked }: UsePostLikeProps) => {
         router.refresh()
       } catch (error) {
         toast.error('Something went wrong')
+
+        window.location.href = '/'
       }
     },
     [postId, userId, isLiked, loginModal, router]
